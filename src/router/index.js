@@ -1,10 +1,14 @@
 // Composables
+import middleware from '@/core/middleware'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
     path: '/',
     component: () => import('@/layouts/default/DefaultLayout.vue'),
+    beforeEnter: [
+      middleware.redirectIf.unauthenticated
+    ],
     children: [
       {
         path: '',
@@ -22,6 +26,9 @@ const routes = [
       {
         path: 'login',
         name: 'auth.login',
+        beforeEnter: [
+          middleware.redirectIf.authenticated
+        ],
         component: () => import('@/views/auth/LoginView.vue')
       }
     ]
