@@ -1,4 +1,5 @@
-# essentials
+# LAPPF
+Frontend para API em Laravel 10 [LAPP](https://github.com/ernandesrs/pproj_lapp).
 
 ## Project setup
 
