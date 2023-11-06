@@ -34,7 +34,7 @@ const req = async (config = {
             config.success(response);
         }
     }).catch((response) => {
-        console.log(response.response.data.error);
+        console.log(response);
 
         if (config?.fail) {
             config.fail(response);

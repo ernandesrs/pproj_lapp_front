@@ -17,7 +17,7 @@ const redirectors = {
             next({ name: 'auth.login' });
         } else {
             await request({
-                action: '/me',
+                action: '/account/me',
                 method: 'get'
             }).then((resp) => {
                 console.log('Access allowed, this is your profile data: ', resp.data.user);
