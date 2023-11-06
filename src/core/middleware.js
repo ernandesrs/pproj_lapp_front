@@ -1,5 +1,6 @@
 import authToken from '@/utils/auth-token';
 import { request } from '@/plugins/axios';
+import { useAuthStore } from '@/store/auth';
 
 const redirectors = {
     /**
@@ -20,7 +21,7 @@ const redirectors = {
                 action: '/account/me',
                 method: 'get'
             }).then((resp) => {
-                console.log('Access allowed, this is your profile data: ', resp.data.user);
+                useAuthStore().addUser(resp.data.user);
 
                 next();
             }).catch((resp) => {
