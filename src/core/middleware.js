@@ -1,6 +1,7 @@
 import authToken from '@/utils/auth-token';
 import { request } from '@/plugins/axios';
 import { useAuthStore } from '@/store/auth';
+import { useAlertStore } from '@/store/alert';
 
 const redirectors = {
     /**
@@ -14,7 +15,8 @@ const redirectors = {
         let theToken = authToken.get();
 
         if (!theToken) {
-            console.log('Access fail, access your account.');
+            useAlertStore().addFlashMessage('Você não está autenticado, faça login.', 'Necessário login', 'danger');
+
             next({ name: 'auth.login' });
         } else {
             await request({
@@ -25,7 +27,7 @@ const redirectors = {
 
                 next();
             }).catch((resp) => {
-                console.log('A error has ocurred: ', resp.response?.data?.error);
+                useAlertStore().addMessage('A error has ocurred', 'Erro: ' + resp.response?.data?.error, 'danger');
 
                 authToken.remove();
                 next({ name: 'auth.login' });

@@ -23,6 +23,9 @@ import { req } from '@/plugins/axios';
 import authToken from '@/utils/auth-token';
 import { ref, reactive } from 'vue';
 import router from '@/router';
+import { useAlertStore } from '@/store/alert';
+
+const alertStore = useAlertStore();
 
 const showPassword = ref(false);
 
@@ -58,7 +61,12 @@ const method_submit = () => {
         success: (r) => {
             authToken.set(r.data.token);
 
+            alertStore.addFlashMessage('Pronto! Agora você já está logado(a).', 'Login efetuado!', 'success');
+
             router.push({ name: 'home' });
+        },
+        fail: (r) => {
+            alertStore.addMessage('Falha ao fazer login.', 'Erro: ' + r.response?.data?.error, 'danger');
         },
         finally: () => {
             userForm.submitting = false;
