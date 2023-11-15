@@ -77,8 +77,8 @@
 						<v-form @submit.prevent="method_updatePassword">
 							<v-row>
 								<v-col cols="12">
-									<v-text-field type="password" v-model="passwordForm.data.password" name="password" label="Senha"
-										id="password" :error-messages="passwordForm.errors?.password" />
+									<v-text-field type="password" v-model="passwordForm.data.password" name="password"
+										label="Senha" id="password" :error-messages="passwordForm.errors?.password" />
 								</v-col>
 								<v-col cols="12">
 									<v-text-field type="password" v-model="passwordForm.data.password_confirmation"
@@ -177,6 +177,15 @@ const method_photoUpload = (e) => {
 	let photo = e.target.files[0] ?? null;
 
 	if (!photo) {
+		photoForm.value.fail = true;
+		return;
+	}
+
+	if (
+		!['image/jpeg', 'image/png'].includes(photo.type)
+		||
+		photo.size > 1024000
+	) {
 		photoForm.value.fail = true;
 		return;
 	}
