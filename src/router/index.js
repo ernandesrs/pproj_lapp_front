@@ -15,6 +15,11 @@ const routes = [
         name: 'dashboard.home',
         component: () => import('@/views/default/HomeView.vue'),
       },
+      {
+        path: 'perfil',
+        name: 'dashboard.profile',
+        component: () => import('@/views/default/ProfileView.vue')
+      }
     ],
   },
 
