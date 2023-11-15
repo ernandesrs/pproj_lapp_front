@@ -71,7 +71,28 @@
 				</v-card>
 			</v-window-item>
 			<v-window-item>
-				2
+				<v-card>
+					<v-card-item>
+						<!-- basic data -->
+						<v-form @submit.prevent="method_updatePassword">
+							<v-row>
+								<v-col cols="12">
+									<v-text-field type="password" v-model="passwordForm.data.password" name="password" label="Senha"
+										id="password" :error-messages="passwordForm.errors?.password" />
+								</v-col>
+								<v-col cols="12">
+									<v-text-field type="password" v-model="passwordForm.data.password_confirmation"
+										name="password_confirmation" label="Confirmar senha" id="password_confirmation"
+										:error-messages="passwordForm.errors?.password_confirmation" />
+								</v-col>
+								<v-col cols="12" class="text-right">
+									<v-btn type="submit" text="Atualizar" color="primary" prepend-icon="mdi-check"
+										:loading="passwordForm.submitting" />
+								</v-col>
+							</v-row>
+						</v-form>
+					</v-card-item>
+				</v-card>
 			</v-window-item>
 		</v-window>
 
@@ -102,6 +123,15 @@ const photoForm = ref({
 	photo: null,
 	submitting: false,
 	fail: false
+});
+
+const passwordForm = ref({
+	submitting: false,
+	data: {
+		password: null,
+		password_confirmation: null
+	},
+	errors: {}
 });
 
 const method_getUserData = () => {
@@ -189,6 +219,25 @@ const method_deletePhoto = () => {
 		},
 		finally: () => {
 			photoForm.value.submitting = false;
+		}
+	});
+};
+
+const method_updatePassword = () => {
+	passwordForm.value.submitting = true;
+
+	return req({
+		action: '/account/me/update-password',
+		method: 'post',
+		data: passwordForm.value.data,
+		success: () => {
+			useAlertStore().addMessage('Sua senha foi atualizada com sucesso!', 'Senha atualizada!', 'info');
+		},
+		fail: (r) => {
+			passwordForm.value.errors = r.response.data.errors;
+		},
+		finally: () => {
+			passwordForm.value.submitting = false;
 		}
 	});
 }
