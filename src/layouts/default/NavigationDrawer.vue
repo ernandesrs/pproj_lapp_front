@@ -27,18 +27,18 @@
         <v-list>
             <template v-for="item in items" :key="item">
                 <v-list-item v-if="item?.items == undefined" :title="item.text" :to="item.to" :prepend-icon="item.icon"
-                    :active="(item.activeIn ?? []).includes(route.name)" />
+                    :active="(item.activeIn ?? []).includes(route.name)" :ripple="false" />
 
                 <template v-else>
                     <v-list-group>
 
                         <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" :title="item.text" :prepend-icon="item.icon" />
+                            <v-list-item v-bind="props" :title="item.text" :prepend-icon="item.icon" :ripple="false" />
                         </template>
 
                         <template v-for="subItem in item.items" :key="subItem">
                             <v-list-item :title="subItem.text" :to="subItem.to" :prepend-icon="subItem.icon"
-                                :active="(subItem.activeIn ?? []).includes(route.name)" />
+                                :active="(subItem.activeIn ?? []).includes(route.name)" :ripple="false" />
                         </template>
 
                     </v-list-group>

@@ -19,18 +19,10 @@
         </v-container>
     </div>
 
+    <v-progress-linear v-if="props.loading" color="primary" indeterminate height="6" />
+
     <v-container class="py-6">
-        <template v-if="props.loading">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="text-subtitle-1 text-center" cols="12">
-                    Carregando
-                </v-col>
-                <v-col cols="10">
-                    <v-progress-linear color="primary" indeterminate rounded height="8" />
-                </v-col>
-            </v-row>
-        </template>
-        <template v-else>
+        <template v-if="!props.loading">
             <slot />
         </template>
     </v-container>
