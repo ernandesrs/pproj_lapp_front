@@ -48,7 +48,7 @@ const redirectors = {
         let route = null;
 
         if (theToken) {
-            route = { name: 'home' };
+            route = { name: 'dashboard.home' };
         }
 
         next(route);

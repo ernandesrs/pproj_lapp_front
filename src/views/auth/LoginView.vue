@@ -63,7 +63,7 @@ const method_submit = () => {
 
             alertStore.addFlashMessage('Pronto! Agora você já está logado(a).', 'Login efetuado!', 'success');
 
-            router.push({ name: 'home' });
+            router.push({ name: 'dashboard.home' });
         },
         fail: (r) => {
             alertStore.addMessage('Falha ao fazer login.', 'Erro: ' + r.response?.data?.error, 'danger');
