@@ -15,7 +15,8 @@
                 <v-card-item>
                     <div class="d-flex justify-space-between">
                         <v-btn prepend-icon="mdi-account" text="Perfil" color="primary-1" variant="text" size="small" />
-                        <v-btn prepend-icon="mdi-logout" text="Sair" color="danger-1" variant="text" size="small" />
+                        <v-btn @click.stop="method_logout" prepend-icon="mdi-logout" text="Sair" color="danger-1"
+                            variant="text" size="small" :loading="logouting" />
                     </div>
                 </v-card-item>
             </v-card>
@@ -73,6 +74,13 @@ const route = useRoute();
 const drawer = ref(false);
 
 const items = ref([]);
+
+const logouting = ref(false);
+
+const method_logout = () => {
+    logouting.value = true;
+    authStore.logout()
+}
 
 watch(() => props.modelValue, (n) => {
     drawer.value = n;
