@@ -16,6 +16,16 @@ const routes = [
         component: () => import('@/views/default/HomeView.vue'),
       },
       {
+        path: 'example-1',
+        name: 'dashboard.exampleOne',
+        component: () => import('@/views/default/ExampleOneView.vue'),
+      },
+      {
+        path: 'example-2',
+        name: 'dashboard.exampleTwo',
+        component: () => import('@/views/default/ExampleTwoView.vue'),
+      },
+      {
         path: 'perfil',
         name: 'dashboard.profile',
         component: () => import('@/views/default/ProfileView.vue')
