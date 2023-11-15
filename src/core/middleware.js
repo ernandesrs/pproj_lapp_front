@@ -1,5 +1,5 @@
 import authToken from '@/utils/auth-token';
-import { request } from '@/plugins/axios';
+import { request } from '@/plugins/requester';
 import { useAuthStore } from '@/store/auth';
 import { useAlertStore } from '@/store/alert';
 

@@ -2,7 +2,7 @@
 import authToken from '@/utils/auth-token';
 import { defineStore } from 'pinia'
 import { useAlertStore } from './alert';
-import { req } from '@/plugins/axios';
+import { req } from '@/plugins/requester';
 import router from '@/router';
 
 export const useAuthStore = defineStore('auth', {

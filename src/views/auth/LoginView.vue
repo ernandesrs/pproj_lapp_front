@@ -19,7 +19,7 @@
 <script setup>
 
 import BaseView from '@/layouts/auth/BaseView.vue';
-import { req } from '@/plugins/axios';
+import { req } from '@/plugins/requester.js';
 import authToken from '@/utils/auth-token';
 import { ref, reactive } from 'vue';
 import router from '@/router';
@@ -75,4 +75,4 @@ const method_submit = () => {
 }
 
 </script>
-  
+  @/plugins/requester
