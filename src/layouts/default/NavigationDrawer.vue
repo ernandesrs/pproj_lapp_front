@@ -3,8 +3,23 @@
 
         <v-list>
             <v-list-item :prepend-icon="authStore.getPhoto == null ? 'mdi-account' : null"
-                :prepend-avatar="authStore.getPhoto" :title="authStore.getFullName" :subtitle="authStore.getEmail" />
+                :prepend-avatar="authStore.getPhoto" :title="authStore.getFullName" :subtitle="authStore.getEmail">
+                <template v-slot:append>
+                    <v-btn size="small" variant="text" icon="mdi-menu-down" id="profile-menu" />
+                </template>
+            </v-list-item>
         </v-list>
+
+        <v-menu location="bottom right" activator="#profile-menu">
+            <v-card color="dark-1" min-width="225px">
+                <v-card-item>
+                    <div class="d-flex justify-space-between">
+                        <v-btn prepend-icon="mdi-account" text="Perfil" color="primary-1" variant="text" size="small" />
+                        <v-btn prepend-icon="mdi-logout" text="Sair" color="danger-1" variant="text" size="small" />
+                    </div>
+                </v-card-item>
+            </v-card>
+        </v-menu>
 
         <v-divider></v-divider>
 
