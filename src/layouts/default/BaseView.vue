@@ -3,7 +3,7 @@
         <!-- left side(title, breadcrumbs) -->
         <div class="flex flex-column">
             <h1 class="text-h5 mb-3">{{ pageTitle }}</h1>
-            <v-breadcrumbs v-if="!['dashboard.home'].includes(route.name)" :items="breads" density="compact" class="px-0 pl-1 text-body-2 text-dark-1">
+            <v-breadcrumbs v-if="!['dashboard.home'].includes(route.name)" :items="breads" density="compact" class="px-0 pl-1 text-body-2 text-dark">
                 <template v-slot:title="{ item }">
                     {{ item.title.toUpperCase() }}
                 </template>
@@ -16,7 +16,7 @@
         </div>
     </v-container>
 
-    <v-container class="border border-light-3 rounded px-8 py-4 ">
+    <v-container class="border border-light rounded px-8 py-4 ">
         <slot />
     </v-container>
 </template>

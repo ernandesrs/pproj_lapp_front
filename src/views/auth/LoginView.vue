@@ -9,7 +9,7 @@
 
                 <div class="py-5 d-flex justify-space-between items-center">
                     <v-btn flat>Esquecia a senha</v-btn>
-                    <v-btn type="submit" color="primary-1" :loading="userForm.submitting">Fazer login</v-btn>
+                    <v-btn type="submit" color="primary" :loading="userForm.submitting">Fazer login</v-btn>
                 </div>
             </v-form>
         </template>

@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer v-model="drawer" elevation="12" color="dark-3" location="start">
+    <v-navigation-drawer v-model="drawer" elevation="12" color="sidebar-darken-1" location="start">
 
         <v-list>
             <v-list-item :prepend-icon="authStore.getPhoto == null ? 'mdi-account' : null"
@@ -11,11 +11,11 @@
         </v-list>
 
         <v-menu location="bottom right" activator="#profile-menu">
-            <v-card color="dark-1" min-width="225px">
+            <v-card min-width="225px">
                 <v-card-item>
                     <div class="d-flex justify-space-between">
-                        <v-btn prepend-icon="mdi-account" text="Perfil" color="primary-1" variant="text" size="small" />
-                        <v-btn @click.stop="method_logout" prepend-icon="mdi-logout" text="Sair" color="danger-1"
+                        <v-btn prepend-icon="mdi-account" text="Perfil" color="primary" variant="text" size="small" />
+                        <v-btn @click.stop="method_logout" prepend-icon="mdi-logout" text="Sair" color="danger"
                             variant="text" size="small" :loading="logouting" />
                     </div>
                 </v-card-item>
