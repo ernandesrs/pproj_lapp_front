@@ -1,6 +1,6 @@
 <template>
-    <v-alert v-model="show" transition="scroll-x-transition" closable :color="alert.color + '-3'" border="start"
-        :border-color="alert.color + '-1'" elevation="3" :icon="alert.icon" :title="alert.title" :text="alert.text"
+    <v-alert v-model="show" transition="scroll-x-transition" closable :color="alert.color + '-lighten-1'" border="start"
+        :border-color="alert.color + '-darken-1'" elevation="3" :icon="alert.icon" :title="alert.title" :text="alert.text"
         class="fixed-alert" />
 </template>
 
