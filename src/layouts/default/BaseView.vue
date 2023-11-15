@@ -1,24 +1,25 @@
 <template>
-    <v-container class="w-100 d-flex justify-space-between">
-        <!-- left side(title, breadcrumbs) -->
-        <div class="flex flex-column">
-            <h1 class="text-h5 mb-3">{{ pageTitle }}</h1>
-            <v-breadcrumbs v-if="!['dashboard.home'].includes(route.name)" :items="breads" density="compact"
-                class="px-0 pl-1 text-body-2 text-dark">
-                <template v-slot:title="{ item }">
-                    {{ item.title.toUpperCase() }}
-                </template>
-            </v-breadcrumbs>
-        </div>
+    <div class="bg-light py-4">
+        <v-container class="w-100 d-flex justify-space-between">
+            <!-- left side(title, breadcrumbs) -->
+            <div class="flex flex-column">
+                <h1 class="text-h5 mb-3">{{ pageTitle }}</h1>
+                <v-breadcrumbs v-if="!['dashboard.home'].includes(route.name)" :items="breads" density="compact"
+                    class="px-0 pl-1 text-body-2 text-dark">
+                    <template v-slot:title="{ item }">
+                        {{ item.title.toUpperCase() }}
+                    </template>
+                </v-breadcrumbs>
+            </div>
 
-        <!-- right side -->
-        <div>
+            <!-- right side -->
+            <div>
 
-        </div>
-    </v-container>
+            </div>
+        </v-container>
+    </div>
 
-    <v-container>
-
+    <v-container class="py-6">
         <template v-if="props.loading">
             <v-row class="fill-height" align-content="center" justify="center">
                 <v-col class="text-subtitle-1 text-center" cols="12">

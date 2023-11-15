@@ -27,6 +27,23 @@ const myThemeColors = {
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
+  defaults: {
+    VBtn: {
+      class: 'text-none',
+    },
+    VTextField: {
+      variant: 'outlined'
+    },
+    VSelect: {
+      variant: 'outlined'
+    },
+    VFileInput: {
+      variant: 'outlined'
+    },
+    VTextArea: {
+      variant: 'outlined'
+    }
+  },
   theme: {
     variations: {
       colors: ['sidebar', 'primary', 'secondary', 'light', 'dark', 'success', 'info', 'warning', 'danger'],

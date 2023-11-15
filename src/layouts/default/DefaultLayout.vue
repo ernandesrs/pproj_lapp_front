@@ -12,7 +12,7 @@
 			</template>
 		</v-app-bar>
 
-		<v-main class="py-10 mt-10" style="min-height: 300px;">
+		<v-main style="min-height: 300px;">
 			<alert-comp />
 			<router-view />
 		</v-main>
