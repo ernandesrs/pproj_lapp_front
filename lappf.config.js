@@ -15,6 +15,14 @@ const config = {
             },
             activeIn: ['dashboard.home']
         },
+        {
+            text: 'Listagem',
+            icon: 'mdi-format-list-bulleted',
+            to: {
+                name: 'dashboard.list'
+            },
+            activeIn: ['dashboard.list']
+        },
 
         // menu item with submenu
         {

@@ -16,6 +16,26 @@ const routes = [
         component: () => import('@/views/default/HomeView.vue'),
       },
       {
+        path: 'listagem',
+        children: [
+          {
+            path: '',
+            name: 'dashboard.list',
+            component: () => import('@/views/default/list/ListView.vue')
+          },
+          {
+            path: 'ver/:user_id',
+            name: 'dashboard.list.show',
+            component: () => import('@/views/default/list/ShowView.vue')
+          },
+          {
+            path: 'editar/:user_id',
+            name: 'dashboard.list.edit',
+            component: () => import('@/views/default/list/EditView.vue')
+          }
+        ]
+      },
+      {
         path: 'example-1',
         name: 'dashboard.exampleOne',
         component: () => import('@/views/default/ExampleOneView.vue'),

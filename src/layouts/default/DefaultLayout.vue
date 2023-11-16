@@ -42,3 +42,9 @@ const method_toggleTheme = () => {
 appStore.startMonitors();
 
 </script>
+
+<style>
+.v-btn>* {
+	pointer-events: none;
+}
+</style>
