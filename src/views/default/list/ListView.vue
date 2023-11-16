@@ -52,6 +52,12 @@ let items = [
 		email: 'john@mail.com'
 	},
 	{
+		id: 1,
+		first_name: 'Johnny',
+		last_name: 'Dear',
+		email: 'johmdn@mail.com'
+	},
+	{
 		id: 2,
 		first_name: 'Mary',
 		last_name: 'Mrie',
@@ -95,6 +101,6 @@ let items = [
 	}
 ];
 
-items = [];
+// items = [];
 
 </script>

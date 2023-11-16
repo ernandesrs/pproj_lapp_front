@@ -3,32 +3,48 @@
         :text="deleteConfirmation.dialog.text" :callback-cancel="method_actionDeleteCanceled"
         :callback-confirm="method_actionDeleteConfirmed" />
 
-    <v-sheet v-if="list.length == 0" class="text-h7 font-weight-medium text-dark-lighten-4 text-center rounded px-10 py-5">
-        A lista está vazia
+    <v-sheet class="px-4 py-4 text-right">
+        <v-text-field v-model="filtering.data.search" label="Pesquisar" name="search" density="compact" clearable>
+            <template #append>
+                <v-btn-group>
+                    <v-btn @click="method_filter" icon="mdi-magnify" color="light-darken-1" text />
+                </v-btn-group>
+            </template>
+        </v-text-field>
+
     </v-sheet>
-    <v-table v-else>
-        <thead>
-            <tr>
-                <th v-for="col in props.columns" :key="col" class="text-left">
-                    {{ col.label }}
-                </th>
-                <th class="text-right">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="item, index in list" :key="item">
-                <td v-for="col in props.columns" :key="col" class="text-left">{{ item[col.key] }}</td>
-                <td class="text-right">
-                    <v-btn @click.stop="method_actionShow" icon="mdi-eye-outline" color="info-lighten-1" variant="text"
-                        :ripple="false" :data-item-index="index" />
-                    <v-btn @click.stop="method_actionEdit" icon="mdi-pencil-box-outline" color="info" variant="text"
-                        :ripple="false" :data-item-index="index" />
-                    <v-btn @click.stop="method_actionDelete" icon="mdi-delete" color="danger" variant="text" :ripple="false"
-                        :data-item-index="index" />
-                </td>
-            </tr>
-        </tbody>
-    </v-table>
+
+    <v-sheet v-if="(filtering.isFilter ? filtering.list : list).length == 0"
+        class="text-h7 font-weight-medium text-dark-lighten-4 text-center rounded px-10 py-5">
+        {{ filtering.isFilter ? 'Sem resultados' : 'A lista está vazia' }}
+    </v-sheet>
+    <template v-else>
+        <v-sheet>
+            <v-table>
+                <thead>
+                    <tr>
+                        <th v-for="col in props.columns" :key="col" class="text-left">
+                            {{ col.label }}
+                        </th>
+                        <th class="text-right">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item, index in (filtering.isFilter ? filtering.list : list)" :key="item">
+                        <td v-for="col in props.columns" :key="col" class="text-left">{{ item[col.key] }}</td>
+                        <td class="text-right">
+                            <v-btn @click.stop="method_actionShow" icon="mdi-eye-outline" color="info-lighten-1"
+                                variant="text" :ripple="false" :data-item-index="index" />
+                            <v-btn @click.stop="method_actionEdit" icon="mdi-pencil-box-outline" color="info" variant="text"
+                                :ripple="false" :data-item-index="index" />
+                            <v-btn @click.stop="method_actionDelete" icon="mdi-delete" color="danger" variant="text"
+                                :ripple="false" :data-item-index="index" />
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+        </v-sheet>
+    </template>
 </template>
 
 <script setup>
@@ -50,6 +66,12 @@ const props = defineProps({
         type: Array,
         default: Array
     },
+
+    actionFilter: {
+        type: Function,
+        default: null
+    },
+
     /**
      * 
      * actionShow precisa ser uma função que:
@@ -98,6 +120,48 @@ const deleteConfirmation = ref({
         text: 'Após confirmar, a exclusão não poderá ser desfeita.'
     }
 });
+
+const filtering = ref({
+    isFilter: false,
+    list: [],
+    data: {
+        search: null
+    }
+});
+
+/**
+ * 
+ * Filter methods
+ */
+const method_filter = () => {
+    if (!props.actionFilter) {
+        method_localFilter();
+        return;
+    }
+
+    // 
+};
+
+const method_localFilter = () => {
+    if ((filtering.value.data.search ?? '').length == 0) {
+        filtering.value.isFilter = false;
+    } else {
+        filtering.value.isFilter = true;
+    }
+
+    // search
+    filtering.value.list = list.value.filter((item) => {
+        return props.columns.find((cv) => {
+            return item[cv.key].toLowerCase().includes((filtering.value.data.search ?? '').toLowerCase());
+        });
+    });
+};
+
+/**
+ * 
+ * Actions methods
+ *  
+ */
 
 const method_actionShow = (e) => {
     let item = method_getItem(e);
