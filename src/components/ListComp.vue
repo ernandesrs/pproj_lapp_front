@@ -5,15 +5,18 @@
 
     <v-sheet class="px-4 py-4 text-right">
         <v-text-field v-model="filtering.data.search" label="Pesquisar" name="search" density="compact" clearable
-            append-icon="mdi-magnify" @click:append="method_filter" />
+            append-icon="mdi-magnify" @click:append="method_filter" :disabled="filtering.filtering" />
     </v-sheet>
+
 
     <v-sheet v-if="(filtering.isFilter ? filtering.list : list).length == 0"
         class="text-h7 font-weight-medium text-dark-lighten-4 text-center rounded px-10 py-5">
         {{ filtering.isFilter ? 'Sem resultados' : 'A lista está vazia' }}
     </v-sheet>
+
     <template v-else>
         <v-sheet>
+            <v-progress-linear indeterminate v-if="filtering.filtering" color="primary" height="6" />
             <v-table>
                 <thead>
                     <tr>
@@ -72,7 +75,7 @@ const props = defineProps({
 
     /**
      * 
-     * Items para a lista
+     * p.pages para a lista
      * items precisa ser um array:
      * - contendo objetos de item a ser listado
      * 
@@ -160,7 +163,7 @@ const emit = defineEmits({
 
 const router = useRouter();
 
-const list = ref(props.items);
+const list = ref([]);
 
 const pagination = ref({
     page: 1,
@@ -169,6 +172,7 @@ const pagination = ref({
 
 const filtering = ref({
     isFilter: false,
+    filtering: false,
     list: [],
     data: {
         search: null
@@ -199,7 +203,22 @@ const method_filter = () => {
         return;
     }
 
-    // 
+    filtering.value.filtering = true;
+
+    let promise = props.actionFilter({
+        data: filtering.value.data,
+        urlParams: (Object.entries(filtering.value.data).map((d) => {
+            return d[0] + '=' + d[1];
+        })).join('&')
+    });
+
+    try {
+        promise.finally(() => {
+            filtering.value.filtering = false;
+        });
+    } catch {
+        filtering.value.filtering = false;
+    }
 };
 
 // const method_localFilter = () => {
@@ -335,6 +354,14 @@ const method_getItem = (event) => {
  * 
  * 
  */
+watch(() => props.items, (n) => {
+    list.value = n;
+}, { immediate: true, deep: true });
+
+watch(() => props.pages, (n) => {
+    pagination.value.pages = n;
+}, { immediate: true, deep: true });
+
 watch(() => pagination.value.page, (n) => {
     emit('changePage', n);
 });

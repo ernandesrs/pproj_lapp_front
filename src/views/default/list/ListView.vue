@@ -3,7 +3,7 @@
 		{ title: 'Listagem', to: { name: 'dashboard.list' } }
 	]">
 
-		<list-comp @change-page="(page) => { console.log(page) }" pages="10" :items="items" :columns="[
+		<list-comp @change-page="(page) => { console.log(page) }" :pages="pages" :items="items" :columns="[
 			{
 				key: 'first_name',
 				label: 'Nome'
@@ -16,7 +16,10 @@
 				key: 'email',
 				label: 'E-mail'
 			}
-		]" :action-show="(data) => {
+		]" :action-filter="(d) => {
+	console.log(d);
+	return null;
+}" :action-show="(data) => {
 	return {
 		name: 'dashboard.list.show',
 		params: {
@@ -43,8 +46,11 @@
 
 import BaseView from '@/layouts/default/BaseView.vue';
 import ListComp from '@/components/ListComp.vue';
+import { ref } from 'vue';
 
-let items = [
+let pages = ref(0);
+
+let items = ref([
 	{
 		id: 1,
 		first_name: 'John',
@@ -99,7 +105,7 @@ let items = [
 		last_name: 'Romuf',
 		email: 'natrom@mail.com'
 	}
-];
+]);
 
 // items = [];
 
