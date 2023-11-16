@@ -1,5 +1,6 @@
 import axios from "axios";
 import authToken from "@/utils/auth-token";
+import { useAlertStore } from "@/store/alert";
 
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
@@ -34,7 +35,7 @@ const req = async (config = {
             config.success(response);
         }
     }).catch((response) => {
-        console.log(response);
+        useAlertStore().addError(response.response?.data?.error, false);
 
         if (config?.fail) {
             config.fail(response);

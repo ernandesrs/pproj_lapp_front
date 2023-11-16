@@ -1,6 +1,7 @@
 // Utilities
 import { defineStore } from 'pinia'
 import cookie from '@/plugins/cookie';
+import config from './../../lappf.config';
 
 export const useAlertStore = defineStore('alert', {
     state: () => ({
@@ -15,6 +16,23 @@ export const useAlertStore = defineStore('alert', {
     getters: {
     },
     actions: {
+        addError(error, flash = false, duration = null) {
+            if (flash) {
+                this.addFlashMessage(
+                    config.messages[error]?.text ?? 'Desculpe, houve um erro inesperado.',
+                    config.messages[error]?.title ?? 'Erro!',
+                    'danger',
+                    duration
+                );
+            } else {
+                this.addMessage(
+                    config.messages[error]?.text ?? 'Desculpe, houve um erro inesperado.',
+                    config.messages[error]?.title ?? 'Erro!',
+                    'danger',
+                    duration
+                );
+            }
+        },
         addMessage(message, title, type = 'success', duration = null) {
             this.alert.title = title;
             this.alert.message = message;

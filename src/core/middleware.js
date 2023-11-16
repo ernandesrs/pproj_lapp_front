@@ -27,7 +27,7 @@ const redirectors = {
 
                 next();
             }).catch((resp) => {
-                useAlertStore().addMessage('A error has ocurred', 'Erro: ' + resp.response?.data?.error, 'danger');
+                useAlertStore().addError(resp.response?.data?.error, false);
 
                 authToken.remove();
                 next({ name: 'auth.login' });

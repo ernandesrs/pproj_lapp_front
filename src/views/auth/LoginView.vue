@@ -65,9 +65,6 @@ const method_submit = () => {
 
             router.push({ name: 'dashboard.home' });
         },
-        fail: (r) => {
-            alertStore.addMessage('Falha ao fazer login.', 'Erro: ' + r.response?.data?.error, 'danger');
-        },
         finally: () => {
             userForm.submitting = false;
         }
