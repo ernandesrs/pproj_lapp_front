@@ -3,7 +3,7 @@
 		{ title: 'Listagem', to: { name: 'dashboard.list' } }
 	]">
 
-		<list-comp :items="items" :columns="[
+		<list-comp @change-page="(page) => { console.log(page) }" pages="10" :items="items" :columns="[
 			{
 				key: 'first_name',
 				label: 'Nome'

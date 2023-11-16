@@ -4,14 +4,8 @@
         :callback-confirm="method_actionDeleteConfirmed" />
 
     <v-sheet class="px-4 py-4 text-right">
-        <v-text-field v-model="filtering.data.search" label="Pesquisar" name="search" density="compact" clearable>
-            <template #append>
-                <v-btn-group>
-                    <v-btn @click="method_filter" icon="mdi-magnify" color="light-darken-1" text />
-                </v-btn-group>
-            </template>
-        </v-text-field>
-
+        <v-text-field v-model="filtering.data.search" label="Pesquisar" name="search" density="compact" clearable
+            append-icon="mdi-magnify" @click:append="method_filter" />
     </v-sheet>
 
     <v-sheet v-if="(filtering.isFilter ? filtering.list : list).length == 0"
@@ -44,29 +38,81 @@
                 </tbody>
             </v-table>
         </v-sheet>
+
+        <v-sheet v-if="pagination.pages" class="py-8">
+            <v-pagination v-model="pagination.page" :length="pagination.pages" :total-visible="5" />
+        </v-sheet>
     </template>
 </template>
 
 <script setup>
 
-import { ref } from 'vue';
+/**
+ * 
+ * LIST COMP: List Component
+ * 
+ */
+
+import { ref, watch } from 'vue';
 import ConfirmationComp from './ConfirmationComp.vue';
 import { useRouter } from 'vue-router';
 import { req } from '@/plugins/requester';
 import { useAlertStore } from '@/store/alert';
 
-const router = useRouter();
-
 const props = defineProps({
+    /**
+     * 
+     * Número total de páginas
+     * 
+     */
+    pages: {
+        type: [Number, String],
+        default: 0
+    },
+
+    /**
+     * 
+     * Items para a lista
+     * items precisa ser um array:
+     * - contendo objetos de item a ser listado
+     * 
+     */
     items: {
         type: Array,
         default: Array
     },
+
+    /**
+     * 
+     * Colunas a serem mostradas
+     * columns precisa ser um array:
+     * - contendo objetos com as seguintes chaves:
+     *   - key: nome do campo nos objetos contidos em items
+     *   - label: Label para o campo
+     * 
+     * isso será utilizado para criar células na tabela de listagem e para acessar os valores nos objetos de items
+     * 
+     */
     columns: {
         type: Array,
         default: Array
     },
 
+    /**
+     * 
+     * Filtragem da lista
+     * 
+     * actionFilter precisa ser uma função que recebe os dados de filtragem e formato de objeto, exemplo:
+     *     {
+     *         search: 'termo de busca',
+     *         orderbyname: 'asc',
+     *         urlParams: search=termo de busca&orderbyname=asc
+     *     }
+     * 
+     * Com os dados de filtragem em mãos, a função deve fazer uma requisição ao backend solicitando a filtragem
+     * atualizando a lista de itens
+     * 
+     */
     actionFilter: {
         type: Function,
         default: null
@@ -108,7 +154,26 @@ const props = defineProps({
     }
 });
 
+const emit = defineEmits({
+    'changePage': null
+});
+
+const router = useRouter();
+
 const list = ref(props.items);
+
+const pagination = ref({
+    page: 1,
+    pages: props.pages
+});
+
+const filtering = ref({
+    isFilter: false,
+    list: [],
+    data: {
+        search: null
+    }
+});
 
 const deleteConfirmation = ref({
     item: null,
@@ -121,45 +186,42 @@ const deleteConfirmation = ref({
     }
 });
 
-const filtering = ref({
-    isFilter: false,
-    list: [],
-    data: {
-        search: null
-    }
-});
-
 /**
  * 
+ * 
  * Filter methods
+ * 
+ * 
  */
 const method_filter = () => {
     if (!props.actionFilter) {
-        method_localFilter();
+        // method_localFilter();
         return;
     }
 
     // 
 };
 
-const method_localFilter = () => {
-    if ((filtering.value.data.search ?? '').length == 0) {
-        filtering.value.isFilter = false;
-    } else {
-        filtering.value.isFilter = true;
-    }
+// const method_localFilter = () => {
+//     if ((filtering.value.data.search ?? '').length == 0) {
+//         filtering.value.isFilter = false;
+//     } else {
+//         filtering.value.isFilter = true;
+//     }
 
-    // search
-    filtering.value.list = list.value.filter((item) => {
-        return props.columns.find((cv) => {
-            return item[cv.key].toLowerCase().includes((filtering.value.data.search ?? '').toLowerCase());
-        });
-    });
-};
+//     // search
+//     filtering.value.list = list.value.filter((item) => {
+//         return props.columns.find((cv) => {
+//             return item[cv.key].toLowerCase().includes((filtering.value.data.search ?? '').toLowerCase());
+//         });
+//     });
+// };
 
 /**
  * 
+ * 
  * Actions methods
+ * 
  *  
  */
 
@@ -265,5 +327,16 @@ const method_getItem = (event) => {
         the_item_index: index
     } : null;
 };
+
+/**
+ * 
+ * 
+ * Watchers
+ * 
+ * 
+ */
+watch(() => pagination.value.page, (n) => {
+    emit('changePage', n);
+});
 
 </script>
