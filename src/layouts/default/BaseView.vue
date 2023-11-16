@@ -14,7 +14,9 @@
 
             <!-- right side -->
             <div>
-
+                <v-btn v-if="props.actionCreate.show" @click="method_actionCreate"
+                    :text="props.actionCreate.text ?? 'Novo item'" color="success" prepend-icon="mdi-plus" :to="props.actionCreate?.to" />
+                <slot name="actionButtons" />
             </div>
         </v-container>
     </div>
@@ -43,6 +45,15 @@ const props = defineProps({
     loading: {
         type: Boolean,
         default: false
+    },
+
+    actionCreate: {
+        type: [Object],
+        default: Object.create({
+            show: false,
+            text: 'Novo item',
+            to: null
+        })
     }
 });
 
@@ -67,7 +78,19 @@ const method_setTitlebar = () => {
     }
 
     document.title = appStore.getName + ' - ' + titleContent;
-}
+};
+
+const method_actionCreate = () => {
+    if (props.actionCreate?.to) {
+        return;
+    }
+
+    try {
+        props.actionCreate?.callback();
+    } catch {
+        // 
+    }
+};
 
 onUpdated(() => {
 

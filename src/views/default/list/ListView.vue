@@ -1,7 +1,14 @@
 <template>
 	<base-view page-title="Listagem" :breadcrumbs="[
 		{ title: 'Listagem', to: { name: 'dashboard.list' } }
-	]">
+	]" :action-create="{
+	show: true,
+	text: 'Nova item da lsita',
+	to: null,
+	callback: () => {
+		console.log('action create callback')
+	}
+}">
 
 		<list-comp @change-page="(page) => { console.log(page) }" :pages="pages" :items="items" :columns="[
 			{
