@@ -31,8 +31,15 @@
 										<v-file-input class="d-none" ref="photoSelector" label="Selecionar Arquivo"
 											show-size @change="method_photoUpload"></v-file-input>
 
-										<v-btn v-if="userForm.data?.photo_url" @click="method_deletePhoto"
-											text="Excluir foto" color="danger" prepend-icon="mdi-delete-outline"
+										<confirmation-comp v-model="photoDeleteConfirmDialog" color="danger"
+											title="Excluir foto?"
+											text="Após confirmar, a exclusão da foto não poderá ser desfeita."
+											:callback-confirm="method_deletePhoto" :callback-cancel="() => {
+												// este callback será chamado quando houver o cancelamento da exclusão da foto
+											}" />
+
+										<v-btn v-if="userForm.data?.photo_url" @click="method_deletePhotoConfirm"
+											text="Excluir foto" color="danger-lighten-1" prepend-icon="mdi-delete-outline"
 											:loading="photoForm.submitting" />
 									</v-btn-group>
 									<small class="mt-4"
@@ -102,6 +109,7 @@
 <script setup>
 
 import BaseView from '@/layouts/default/BaseView.vue';
+import ConfirmationComp from '@/components/ConfirmationComp.vue';
 import { req } from '@/plugins/requester';
 import { useAlertStore } from '@/store/alert';
 import { useAuthStore } from '@/store/auth';
@@ -133,6 +141,8 @@ const passwordForm = ref({
 	},
 	errors: {}
 });
+
+const photoDeleteConfirmDialog = ref(false);
 
 const method_getUserData = () => {
 	return req({
@@ -214,6 +224,10 @@ const method_photoUpload = (e) => {
 		}
 	});
 };
+
+const method_deletePhotoConfirm = () => {
+	photoDeleteConfirmDialog.value = true;
+}
 
 const method_deletePhoto = () => {
 	photoForm.value.submitting = true;
