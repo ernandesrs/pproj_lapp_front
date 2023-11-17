@@ -2,7 +2,7 @@
     <base-view page-title="Usuários" :breadcrumbs="[{ title: 'Usuários', to: { name: 'dashboard.users' } }]"
         :action-create="{ show: true, text: 'Novo usuário', to: { name: 'dashboard.users.create' } }">
 
-        <list-comp
+        <table-comp
             :thumb="{ key: 'photo_url', alternativeKey: 'first_name', label: 'Foto', width: 35, height: 35, circle: true }"
             :action-get-list="method_getUsers" :action-change-page="method_changePage" :action-filter="method_filterList"
             :columns="[{ key: 'first_name', label: 'Nome' }, { key: 'last_name', label: 'Sobrenome' }, { key: 'email', label: 'Email' }]"
@@ -16,7 +16,7 @@
 <script setup>
 
 import BaseView from '@/layouts/default/BaseView.vue';
-import ListComp from '@/components/ListComp.vue';
+import TableComp from '@/components/TableComp.vue';
 import { request } from '@/plugins/requester';
 
 const method_getUsers = (d) => {
