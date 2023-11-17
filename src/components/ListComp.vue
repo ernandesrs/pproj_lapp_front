@@ -15,9 +15,12 @@
 
     <template v-else>
         <v-sheet>
-            <v-table>
+            <v-table hover>
                 <thead>
                     <tr>
+                        <th v-if="props.thumb">
+                            {{ props.thumb?.label ?? 'Thumbnail' }}
+                        </th>
                         <th v-for="col in props.columns" :key="col" class="text-left">
                             {{ col.label }}
                         </th>
@@ -25,18 +28,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item, index in (filtering.isFilter ? filtering.list : list)" :key="item">
-                        <td v-for="col in props.columns" :key="col" class="text-left">{{ item[col.key] }}</td>
-                        <td v-if="computed_showActions" class="text-right">
-                            <v-btn v-if="computed_showShowAction" @click.stop="method_actionShow" icon="mdi-eye-outline"
-                                color="info-lighten-1" variant="text" :ripple="false" :data-item-index="index" />
-                            <v-btn v-if="computed_showEditAction" @click.stop="method_actionEdit"
-                                icon="mdi-pencil-box-outline" color="info" variant="text" :ripple="false"
-                                :data-item-index="index" />
-                            <v-btn v-if="computed_showDeleteAction" @click.stop="method_actionDelete" icon="mdi-delete"
-                                color="danger" variant="text" :ripple="false" :data-item-index="index" />
-                        </td>
-                    </tr>
+                    <template v-for="item, index in (filtering.isFilter ? filtering.list : list)" :key="item">
+                        <tr>
+                            <td v-if="props.thumb" class="py-3">
+                                <thumb-comp :image-url="item[props.thumb.key]"
+                                    :alternative-text="item[props.thumb.alternativeKey]"
+                                    :circle="props.thumb?.circle ?? false" :max-width="props.thumb?.width ?? 50"
+                                    :max-height="props.thumb?.height ?? 50" elevated border />
+                            </td>
+                            <td v-for="col in props.columns" :key="col" class="text-left">{{ item[col.key] }}</td>
+                            <td v-if="computed_showActions" class="text-right">
+                                <v-btn v-if="computed_showShowAction" @click.stop="method_actionShow" icon="mdi-eye-outline"
+                                    color="light-darken-4" variant="text" :ripple="false" :data-item-index="index" />
+                                <v-btn v-if="computed_showEditAction" @click.stop="method_actionEdit"
+                                    icon="mdi-pencil-box-outline" color="info" variant="text" :ripple="false"
+                                    :data-item-index="index" />
+                                <v-btn v-if="computed_showDeleteAction" @click.stop="method_actionDelete" icon="mdi-delete"
+                                    color="danger" variant="text" :ripple="false" :data-item-index="index" />
+                            </td>
+                        </tr>
+                    </template>
                 </tbody>
             </v-table>
         </v-sheet>
@@ -61,8 +72,28 @@ import { useRouter } from 'vue-router';
 import { req } from '@/plugins/requester';
 import { useAlertStore } from '@/store/alert';
 import { useAppStore } from '@/store/app';
+import ThumbComp from './ThumbComp.vue';
 
 const props = defineProps({
+    /**
+     * 
+     * Thumb config
+     * Example: 
+     *     {
+     *          label: 'Foto',
+     *          key: 'photo_url',
+     *          alternativeKey: 'first_name',
+     *          width: 40,
+     *          height: 40,
+     *          circle: true
+     *     }
+     * 
+     */
+    thumb: {
+        type: [Object, null],
+        default: null
+    },
+
     /**
      * 
      * Colunas a serem mostradas
@@ -421,6 +452,10 @@ const computed_showEditAction = computed(() => {
 const computed_showDeleteAction = computed(() => {
     return props.actionDelete ? true : false;
 });
+
+// const computed_thumSlotHasContent = computed(()=>{
+//     return !!$slo
+// });
 
 /**
  * 
