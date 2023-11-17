@@ -21,19 +21,20 @@
                         <th v-for="col in props.columns" :key="col" class="text-left">
                             {{ col.label }}
                         </th>
-                        <th class="text-right">Ações</th>
+                        <th v-if="computed_showActions" class="text-right">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item, index in (filtering.isFilter ? filtering.list : list)" :key="item">
                         <td v-for="col in props.columns" :key="col" class="text-left">{{ item[col.key] }}</td>
-                        <td class="text-right">
-                            <v-btn @click.stop="method_actionShow" icon="mdi-eye-outline" color="info-lighten-1"
-                                variant="text" :ripple="false" :data-item-index="index" />
-                            <v-btn @click.stop="method_actionEdit" icon="mdi-pencil-box-outline" color="info" variant="text"
-                                :ripple="false" :data-item-index="index" />
-                            <v-btn @click.stop="method_actionDelete" icon="mdi-delete" color="danger" variant="text"
-                                :ripple="false" :data-item-index="index" />
+                        <td v-if="computed_showActions" class="text-right">
+                            <v-btn v-if="computed_showShowAction" @click.stop="method_actionShow" icon="mdi-eye-outline"
+                                color="info-lighten-1" variant="text" :ripple="false" :data-item-index="index" />
+                            <v-btn v-if="computed_showEditAction" @click.stop="method_actionEdit"
+                                icon="mdi-pencil-box-outline" color="info" variant="text" :ripple="false"
+                                :data-item-index="index" />
+                            <v-btn v-if="computed_showDeleteAction" @click.stop="method_actionDelete" icon="mdi-delete"
+                                color="danger" variant="text" :ripple="false" :data-item-index="index" />
                         </td>
                     </tr>
                 </tbody>
@@ -54,7 +55,7 @@
  * 
  */
 
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import ConfirmationComp from './ConfirmationComp.vue';
 import { useRouter } from 'vue-router';
 import { req } from '@/plugins/requester';
@@ -125,6 +126,11 @@ const props = defineProps({
     /**
      * 
      * actionShow precisa ser uma função que:
+     * - receba os dados do item em formato de objeto, exemplo:
+     *     {
+     *        id: 1,
+     *        index: 0
+     *     }
      * - retorne um objeto contendo o nome da rota, parâmetros, etc, para onde o usuário será direcionado
      *   para Ver o item clicado ou;
      *
@@ -137,6 +143,11 @@ const props = defineProps({
     /**
      * 
      * actionEdit precisa ser uma função que:
+     * - receba os dados do item em formato de objeto, exemplo:
+     *     {
+     *        id: 1,
+     *        index: 0
+     *     }
      * - retorne um objeto contendo o nome da rota, parâmetros, etc, para onde o usuário será direcionado
      *   para Editar o item clicado ou;
      *
@@ -149,6 +160,12 @@ const props = defineProps({
     /**
      * 
      * actionDelete precisa ser uma função que:
+     * - receba os dados do item em formato de objeto, exemplo:
+     *     {
+     *        id: 1,
+     *        index: 0
+     *     }
+     * 
      * - retorne uma string contendo o endpoint da API para exclusão do item em caso de confirmação
      *
      */
@@ -264,7 +281,7 @@ const method_callGetList = (promise) => {
             pagination.value.pages = (resp.data.users?.meta?.links?.length ?? 2) - 2;
         })
         .catch((resp) => {
-            console.log('error', resp);
+            useAlertStore().addError(resp.response?.data?.error, false);
         })
         .then(() => {
             appStore.setLoadingContent(false);
@@ -381,6 +398,29 @@ const method_getItem = (event) => {
         the_item_index: index
     } : null;
 };
+
+/**
+ * 
+ * 
+ * Computeds
+ * 
+ * 
+ */
+const computed_showActions = computed(() => {
+    return (props.actionShow || props.actionEdit || props.actionDelete) ? true : false;
+});
+
+const computed_showShowAction = computed(() => {
+    return props.actionShow ? true : false;
+});
+
+const computed_showEditAction = computed(() => {
+    return props.actionEdit ? true : false;
+});
+
+const computed_showDeleteAction = computed(() => {
+    return props.actionDelete ? true : false;
+});
 
 /**
  * 

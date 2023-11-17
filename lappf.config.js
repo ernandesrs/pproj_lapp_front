@@ -52,6 +52,10 @@ const config = {
             title: 'Dados inválidos',
             text: 'Um ou mais dados informados são inválidos.'
         },
+        'UnauthorizedActionException': {
+            title: 'Não autorizado',
+            text: 'Desculpe, você não tem autorização para executar esta ação.'
+        },
 
         /**
          * 
