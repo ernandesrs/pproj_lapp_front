@@ -27,7 +27,7 @@
 								<div class="d-flex align-center align-sm-start flex-column">
 									<v-btn-group density="compact">
 										<v-btn text="Nova foto" color="info" prepend-icon="mdi-arrow-up"
-											@click="method_openPhotoSelector" :loading="photoForm.submitting" />
+											@click="method_openPhotoSelector" :disabled="photoForm.submitting" />
 										<v-file-input class="d-none" ref="photoSelector" label="Selecionar Arquivo"
 											show-size @change="method_photoUpload"></v-file-input>
 
@@ -52,20 +52,9 @@
 							<!-- basic data -->
 							<v-col cols="12">
 								<v-form @submit.prevent="method_updateAccount">
+									<basic-user-fields v-model="userForm.data" :errors="userForm.errors" />
+
 									<v-row>
-										<v-col cols="6">
-											<v-text-field v-model="userForm.data.first_name" name="first_name" label="Nome"
-												id="first_name" :error-messages="userForm.errors?.first_name" />
-										</v-col>
-										<v-col cols="6">
-											<v-text-field v-model="userForm.data.last_name" name="last_name"
-												label="Sobrenome" id="last_name"
-												:error-messages="userForm.errors?.last_name" />
-										</v-col>
-										<v-col cols="12">
-											<v-text-field v-model="userForm.data.username" name="username" label="Usuário"
-												id="username" :error-messages="userForm.errors?.username" />
-										</v-col>
 										<v-col cols="12" class="text-right">
 											<v-btn type="submit" text="Atualizar" color="primary" prepend-icon="mdi-check"
 												:loading="userForm.submitting" />
@@ -110,6 +99,7 @@
 
 import BaseView from '@/layouts/default/BaseView.vue';
 import ConfirmationComp from '@/components/ConfirmationComp.vue';
+import BasicUserFields from '@/components/views/BasicUserFields.vue';
 import { req } from '@/plugins/requester';
 import { useAlertStore } from '@/store/alert';
 import { useAuthStore } from '@/store/auth';
@@ -120,8 +110,8 @@ const loadingContent = ref(true);
 const accountTab = ref(0);
 
 const userForm = ref({
-	data: null,
 	submitting: false,
+	data: {},
 	errors: {}
 });
 
