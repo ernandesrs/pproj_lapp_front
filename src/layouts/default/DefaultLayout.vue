@@ -2,7 +2,7 @@
 	<v-layout>
 		<navigation-drawer v-model="navigation.drawer" />
 
-		<v-app-bar border="b" scroll-behavior="hide" scroll-threshold="250" flat density="comfortable">
+		<v-app-bar border="b" flat density="comfortable">
 			<v-app-bar-nav-icon variant="text" @click.stop="navigation.drawer = !navigation.drawer" />
 
 			<template #append>
