@@ -22,7 +22,7 @@
         </v-container>
     </div>
 
-    <v-container class="py-6">
+    <v-container class="py-6 my-6">
         <template v-if="!props.loading">
             <slot />
         </template>

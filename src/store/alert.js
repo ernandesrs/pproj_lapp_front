@@ -64,8 +64,6 @@ export const useAlertStore = defineStore('alert', {
 
             this.alert = alert;
             this.id = (new Date).getTime();
-
-            console.log(this.alert);
         }
     }
 })

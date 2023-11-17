@@ -17,7 +17,7 @@ const config = {
         },
         {
             text: 'Usuários',
-            icon: 'mdi-account-group-outline',
+            icon: 'mdi-account-group',
             to: {
                 name: 'dashboard.users'
             },
