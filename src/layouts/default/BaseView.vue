@@ -15,13 +15,12 @@
             <!-- right side -->
             <div>
                 <v-btn v-if="props.actionCreate.show" @click="method_actionCreate"
-                    :text="props.actionCreate.text ?? 'Novo item'" color="success" prepend-icon="mdi-plus" :to="props.actionCreate?.to" />
+                    :text="props.actionCreate.text ?? 'Novo item'" color="success" prepend-icon="mdi-plus"
+                    :to="props.actionCreate?.to" />
                 <slot name="actionButtons" />
             </div>
         </v-container>
     </div>
-
-    <v-progress-linear v-if="props.loading" color="primary" indeterminate height="6" />
 
     <v-container class="py-6">
         <template v-if="!props.loading">
@@ -135,5 +134,9 @@ watch(() => props.breadcrumbs, (n) => {
 watch(() => breads, () => {
     method_setTitlebar();
 }, { deep: true, immediate: true });
+
+watch(() => props.loading, (n) => {
+    appStore.setLoadingContent(n);
+}, { immediate: true });
 
 </script>

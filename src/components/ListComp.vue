@@ -5,9 +5,8 @@
 
     <v-sheet class="px-4 py-4 text-right">
         <v-text-field v-model="filtering.data.search" label="Pesquisar" name="search" density="compact" clearable
-            append-icon="mdi-magnify" @click:append="method_filter" :disabled="filtering.filtering" />
+            append-icon="mdi-magnify" @click:append="method_actionFilter" :disabled="filtering.filtering" />
     </v-sheet>
-
 
     <v-sheet v-if="(filtering.isFilter ? filtering.list : list).length == 0"
         class="text-h7 font-weight-medium text-dark-lighten-4 text-center rounded px-10 py-5">
@@ -16,7 +15,6 @@
 
     <template v-else>
         <v-sheet>
-            <v-progress-linear indeterminate v-if="filtering.filtering" color="primary" height="6" />
             <v-table>
                 <thead>
                     <tr>
@@ -42,7 +40,7 @@
             </v-table>
         </v-sheet>
 
-        <v-sheet v-if="pagination.pages" class="py-8">
+        <v-sheet v-if="pagination.pages" class="px-4 py-8">
             <v-pagination v-model="pagination.page" :length="pagination.pages" :total-visible="5" />
         </v-sheet>
     </template>
@@ -61,30 +59,9 @@ import ConfirmationComp from './ConfirmationComp.vue';
 import { useRouter } from 'vue-router';
 import { req } from '@/plugins/requester';
 import { useAlertStore } from '@/store/alert';
+import { useAppStore } from '@/store/app';
 
 const props = defineProps({
-    /**
-     * 
-     * Número total de páginas
-     * 
-     */
-    pages: {
-        type: [Number, String],
-        default: 0
-    },
-
-    /**
-     * 
-     * p.pages para a lista
-     * items precisa ser um array:
-     * - contendo objetos de item a ser listado
-     * 
-     */
-    items: {
-        type: Array,
-        default: Array
-    },
-
     /**
      * 
      * Colunas a serem mostradas
@@ -103,17 +80,41 @@ const props = defineProps({
 
     /**
      * 
+     * Obter lista
+     * actionGetList deve ser uma função que obtem a lista de items do backend. A função deve:
+     * - retornar uma Promise, para então executar, internamente, o processos: .then().catch().then()
+     * 
+     */
+    actionGetList: {
+        type: Function,
+        default: null,
+    },
+
+    /**
+     * 
+     * Trocar página
+     * actionChangePage deve ser uma função que obtem a lista de items do backend de acordo com a página informada. A função deve:
+     * - retornar uma Promise, para então executar, internamente, o processos: .then().catch().then()
+     * 
+     */
+    actionChangePage: {
+        type: Function,
+        default: null
+    },
+
+    /**
+     * 
      * Filtragem da lista
      * 
-     * actionFilter precisa ser uma função que recebe os dados de filtragem e formato de objeto, exemplo:
+     * actionFilter precisa ser uma função que recebe os dados de filtragem em formato de objeto, exemplo:
      *     {
      *         search: 'termo de busca',
      *         orderbyname: 'asc',
      *         urlParams: search=termo de busca&orderbyname=asc
      *     }
      * 
-     * Com os dados de filtragem em mãos, a função deve fazer uma requisição ao backend solicitando a filtragem
-     * atualizando a lista de itens
+     * Com os dados de filtragem em mãos, a função deve fazer uma requisição ao backend solicitando a filtragem e então:
+     * - retornar uma Promise, para então executar, internamente, o processos: .then().catch().then()
      * 
      */
     actionFilter: {
@@ -157,11 +158,9 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits({
-    'changePage': null
-});
-
 const router = useRouter();
+
+const appStore = useAppStore();
 
 const list = ref([]);
 
@@ -197,9 +196,25 @@ const deleteConfirmation = ref({
  * 
  * 
  */
-const method_filter = () => {
+const method_actionFilter = () => {
     if (!props.actionFilter) {
-        // method_localFilter();
+        return;
+    }
+
+    let filterFields = (Object.entries(filtering.value.data).map((d) => {
+        if (!d[1]) {
+            return null;
+        }
+
+        return d[0] + '=' + d[1];
+    })).filter((ff) => { return ff !== null });
+
+    if (!filterFields.length && filtering.value.isFilter) {
+        // reload list
+        method_actionGetList().finally(() => {
+            filtering.value.filtering = false;
+            filtering.value.isFilter = false;
+        });
         return;
     }
 
@@ -207,43 +222,63 @@ const method_filter = () => {
 
     let promise = props.actionFilter({
         data: filtering.value.data,
-        urlParams: (Object.entries(filtering.value.data).map((d) => {
-            return d[0] + '=' + d[1];
-        })).join('&')
+        urlParams: filterFields.join('&')
     });
 
-    try {
-        promise.finally(() => {
-            filtering.value.filtering = false;
-        });
-    } catch {
+    method_callGetList(promise).finally(() => {
         filtering.value.filtering = false;
-    }
+        filtering.value.isFilter = true;
+    });
 };
-
-// const method_localFilter = () => {
-//     if ((filtering.value.data.search ?? '').length == 0) {
-//         filtering.value.isFilter = false;
-//     } else {
-//         filtering.value.isFilter = true;
-//     }
-
-//     // search
-//     filtering.value.list = list.value.filter((item) => {
-//         return props.columns.find((cv) => {
-//             return item[cv.key].toLowerCase().includes((filtering.value.data.search ?? '').toLowerCase());
-//         });
-//     });
-// };
 
 /**
  * 
  * 
- * Actions methods
+ * ACTIONS METHODS
+ * List items
  * 
  *  
  */
+const method_actionGetList = () => {
+    if (!props.actionGetList) {
+        return;
+    }
 
+    return method_callGetList(props.actionGetList());
+};
+
+const method_actionChangePage = () => {
+    if (!props.actionChangePage) {
+        return;
+    }
+
+    method_callGetList(props.actionChangePage(pagination.value.page));
+};
+
+const method_callGetList = (promise) => {
+    appStore.setLoadingContent(true);
+
+    return promise
+        .then((resp) => {
+            list.value = resp.data.users.list;
+            pagination.value.pages = (resp.data.users?.meta?.links?.length ?? 2) - 2;
+        })
+        .catch((resp) => {
+            console.log('error', resp);
+        })
+        .then(() => {
+            appStore.setLoadingContent(false);
+        });
+};
+
+/**
+ * 
+ * 
+ * ACTIONS METHODS
+ * Show, Edit, Delete
+ * 
+ *  
+ */
 const method_actionShow = (e) => {
     let item = method_getItem(e);
     if (!item) {
@@ -354,16 +389,10 @@ const method_getItem = (event) => {
  * 
  * 
  */
-watch(() => props.items, (n) => {
-    list.value = n;
-}, { immediate: true, deep: true });
-
-watch(() => props.pages, (n) => {
-    pagination.value.pages = n;
-}, { immediate: true, deep: true });
-
-watch(() => pagination.value.page, (n) => {
-    emit('changePage', n);
+watch(() => pagination.value.page, () => {
+    method_actionChangePage();
 });
+
+method_actionGetList();
 
 </script>

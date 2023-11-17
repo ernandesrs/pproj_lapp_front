@@ -16,39 +16,13 @@ const config = {
             activeIn: ['dashboard.home']
         },
         {
-            text: 'Listagem',
-            icon: 'mdi-format-list-bulleted',
+            text: 'Usuários',
+            icon: 'mdi-account-group-outline',
             to: {
-                name: 'dashboard.list'
+                name: 'dashboard.users'
             },
-            activeIn: ['dashboard.list']
+            activeIn: ['dashboard.users', 'dashboard.users.create', 'dashboard.users.show', 'dashboard.users.edit']
         },
-
-        // menu item with submenu
-        {
-            text: 'Submenu',
-            icon: 'mdi-apps',
-            activeIn: ['dashboard.exampleOne', 'dashboard.exampleTwo'],
-            items: [
-                {
-                    text: 'Example #1',
-                    icon: 'mdi-arrow-right',
-                    to: {
-                        name: 'dashboard.exampleOne'
-                    },
-                    activeIn: ['dashboard.exampleOne']
-                },
-                {
-                    text: 'Example #2',
-                    icon: 'mdi-arrow-right',
-                    to: {
-                        name: 'dashboard.exampleTwo'
-                    },
-                    activeIn: ['dashboard.exampleTwo']
-                }
-            ]
-        },
-
         {
             text: 'Perfil',
             icon: 'mdi-account',

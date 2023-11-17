@@ -16,34 +16,29 @@ const routes = [
         component: () => import('@/views/default/HomeView.vue'),
       },
       {
-        path: 'listagem',
+        path: 'usuarios',
         children: [
           {
             path: '',
-            name: 'dashboard.list',
-            component: () => import('@/views/default/list/ListView.vue')
+            name: 'dashboard.users',
+            component: () => import('@/views/default/users/ListView.vue')
+          },
+          {
+            path: 'criar',
+            name: 'dashboard.users.create',
+            component: () => import('@/views/default/users/FormView.vue')
           },
           {
             path: 'ver/:user_id',
-            name: 'dashboard.list.show',
-            component: () => import('@/views/default/list/ShowView.vue')
+            name: 'dashboard.users.show',
+            component: () => import('@/views/default/users/ShowView.vue')
           },
           {
             path: 'editar/:user_id',
-            name: 'dashboard.list.edit',
-            component: () => import('@/views/default/list/EditView.vue')
+            name: 'dashboard.users.edit',
+            component: () => import('@/views/default/users/FormView.vue')
           }
         ]
-      },
-      {
-        path: 'example-1',
-        name: 'dashboard.exampleOne',
-        component: () => import('@/views/default/ExampleOneView.vue'),
-      },
-      {
-        path: 'example-2',
-        name: 'dashboard.exampleTwo',
-        component: () => import('@/views/default/ExampleTwoView.vue'),
       },
       {
         path: 'perfil',

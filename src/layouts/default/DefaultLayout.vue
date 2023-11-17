@@ -10,6 +10,8 @@
 					<v-btn @click="method_toggleTheme" icon="mdi-brightness-6" variant="text" :ripple="false" />
 				</v-btn-group>
 			</template>
+
+			<v-progress-linear v-if="appStore.isLoadingContent" color="primary" indeterminate height="6" absolute />
 		</v-app-bar>
 
 		<v-main style="min-height: 300px;">

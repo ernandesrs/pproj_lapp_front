@@ -4,7 +4,8 @@ import { defineStore } from 'pinia'
 export const useAppStore = defineStore('app', {
   state: () => ({
     name: import.meta.env.VITE_APP_NAME,
-    currentWindowSize: null
+    currentWindowSize: null,
+    loadingContent: false
   }),
 
   getters: {
@@ -13,6 +14,9 @@ export const useAppStore = defineStore('app', {
     },
     inMobile() {
       return this.currentWindowSize >= 1280 ? false : true;
+    },
+    isLoadingContent() {
+      return this.loadingContent;
     }
   },
 
@@ -23,6 +27,9 @@ export const useAppStore = defineStore('app', {
       window.addEventListener('resize', () => {
         this.currentWindowSize = window.innerWidth;
       });
+    },
+    setLoadingContent(s) {
+      this.loadingContent = s;
     }
   }
 })
