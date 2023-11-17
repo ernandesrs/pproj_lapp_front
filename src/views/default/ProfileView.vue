@@ -16,13 +16,8 @@
 							<v-col cols="12" md="8" lg="6"
 								class="mb-4 d-flex flex-column flex-sm-row justify-center align-center">
 								<div class="mb-4 mb-sm-0 mr-sm-4">
-									<v-img v-if="userForm.data?.photo_url" :src="userForm.data.photo_url" width="125px"
-										height="125px" cover class="rounded-circle" />
-									<div v-else
-										class="rounded-circle d-flex align-center justify-center text-h6 font-weight-medium text-light-darken-4 border"
-										style="width: 125px; height: 125px;">
-										{{ userForm.data.first_name[0] }}
-									</div>
+									<thumb-comp :image-url="userForm.data?.photo_url"
+										:alternative-text="userForm.data.first_name" max-width="125" max-height="125" border elevated circle />
 								</div>
 								<div class="d-flex align-center align-sm-start flex-column">
 									<v-btn-group density="compact">
@@ -104,6 +99,7 @@ import { req } from '@/plugins/requester';
 import { useAlertStore } from '@/store/alert';
 import { useAuthStore } from '@/store/auth';
 import { ref } from 'vue';
+import ThumbComp from '@/components/ThumbComp.vue';
 
 const loadingContent = ref(true);
 

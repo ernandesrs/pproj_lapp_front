@@ -6,6 +6,11 @@
         <!-- start -->
         <v-sheet>
             <v-row justify="center">
+                <v-col v-if="!computed_isCreating" cols="12" md="4" lg="3" class="d-flex justify-center mb-6">
+                    <div>
+                        <thumb-comp :alternative-text="formUser.basicData.first_name" :image-url="formUser.basicData.photo_url" max-width="175" max-height="175" elevated circle border />
+                    </div>
+                </v-col>
                 <v-col cols="12" sm="10" md="8" lg="6">
                     <v-form @submit.prevent="method_formSubmit">
                         <basic-user-fields v-model="formUser.basicData" :errors="formUser.basicDataErrors" />
@@ -49,6 +54,7 @@ import { req } from '@/plugins/requester';
 import { computed, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAlertStore } from '@/store/alert';
+import ThumbComp from '@/components/ThumbComp.vue';
 
 const route = useRoute();
 
