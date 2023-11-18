@@ -75,6 +75,16 @@ const config = {
 
         /**
          * 
+         * Admin
+         * 
+         */
+        'HasDependentsException': {
+            title: 'Impossível excluir',
+            text: 'Este recurso não pode ser excluído pois há outros recursos vinculados a ele.'
+        },
+
+        /**
+         * 
          * Account
          * 
          */
