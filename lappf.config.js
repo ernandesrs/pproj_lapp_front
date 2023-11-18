@@ -24,6 +24,14 @@ const config = {
             activeIn: ['dashboard.users', 'dashboard.users.create', 'dashboard.users.show', 'dashboard.users.edit']
         },
         {
+            text: 'Funções',
+            icon: 'mdi-shield-lock',
+            to: {
+                name: 'dashboard.roles'
+            },
+            activeIn: ['dashboard.roles', 'dashboard.roles.create', 'dashboard.roles.show', 'dashboard.roles.edit']
+        },
+        {
             text: 'Configurações',
             icon: 'mdi-cogs',
             to: {

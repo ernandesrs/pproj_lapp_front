@@ -41,6 +41,31 @@ const routes = [
         ]
       },
       {
+        path: 'funcoes',
+        children: [
+          {
+            path: '',
+            name: 'dashboard.roles',
+            component: () => import('@/views/default/roles/ListView.vue')
+          },
+          {
+            path: 'criar',
+            name: 'dashboard.roles.create',
+            component: () => import('@/views/default/roles/FormView.vue')
+          },
+          {
+            path: 'ver/:role_id',
+            name: 'dashboard.roles.show',
+            component: () => import('@/views/default/roles/ShowView.vue')
+          },
+          {
+            path: 'editar/:role_id',
+            name: 'dashboard.roles.edit',
+            component: () => import('@/views/default/roles/FormView.vue')
+          }
+        ]
+      },
+      {
         path: 'configuracoes',
         name: 'dashboard.settings',
         component: () => import('@/views/default/SettingsView.vue')
