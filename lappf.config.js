@@ -24,6 +24,14 @@ const config = {
             activeIn: ['dashboard.users', 'dashboard.users.create', 'dashboard.users.show', 'dashboard.users.edit']
         },
         {
+            text: 'Configurações',
+            icon: 'mdi-cogs',
+            to: {
+                name: 'dashboard.settings'
+            },
+            activeIn: ['dashboard.settings']
+        },
+        {
             text: 'Perfil',
             icon: 'mdi-account',
             to: {

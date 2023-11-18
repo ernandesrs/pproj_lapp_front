@@ -41,6 +41,11 @@ const routes = [
         ]
       },
       {
+        path: 'configuracoes',
+        name: 'dashboard.settings',
+        component: () => import('@/views/default/SettingsView.vue')
+      },
+      {
         path: 'perfil',
         name: 'dashboard.profile',
         component: () => import('@/views/default/ProfileView.vue')

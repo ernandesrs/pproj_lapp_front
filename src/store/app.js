@@ -1,5 +1,11 @@
 // Utilities
 import { defineStore } from 'pinia'
+import setting from '@/utils/setting';
+import vuetify from '@/plugins/vuetify';
+
+const defineTheme = () => {
+  vuetify.theme.global.name.value = setting.getSetting('theme');
+};
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -21,12 +27,14 @@ export const useAppStore = defineStore('app', {
   },
 
   actions: {
-    startMonitors() {
+    startApp() {
       this.currentWindowSize = window.innerWidth;
 
       window.addEventListener('resize', () => {
         this.currentWindowSize = window.innerWidth;
       });
+
+      defineTheme();
     },
     setLoadingContent(s) {
       this.loadingContent = s;

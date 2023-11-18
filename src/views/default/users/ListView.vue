@@ -18,9 +18,10 @@
 import BaseView from '@/layouts/default/BaseView.vue';
 import TableComp from '@/components/TableComp.vue';
 import { request } from '@/plugins/requester';
+import setting from '@/utils/setting';
 
 const method_getUsers = (d) => {
-    let action = '/admin/users?limit=15';
+    let action = '/admin/users?limit=' + setting.getSetting('items_per_page');
 
     if (d?.urlParams) {
         action += '&' + d.urlParams;
