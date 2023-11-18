@@ -8,8 +8,7 @@
             append-icon="mdi-magnify" @click:append="method_actionFilter" :disabled="filtering.filtering" />
     </v-sheet>
 
-    <v-sheet v-if="(filtering.isFilter ? filtering.list : list).length == 0"
-        class="text-h7 font-weight-medium text-dark-lighten-4 text-center rounded px-10 py-5">
+    <v-sheet v-if="list.length == 0" class="text-h7 font-weight-medium text-dark-lighten-4 text-center rounded px-10 py-5">
         {{ filtering.isFilter ? 'Sem resultados' : 'A lista está vazia' }}
     </v-sheet>
 
@@ -28,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="item, index in (filtering.isFilter ? filtering.list : list)" :key="item">
+                    <template v-for="item, index in list" :key="item">
                         <tr>
                             <td v-if="props.thumb" class="py-3">
                                 <thumb-comp :image-url="item[props.thumb.key]"
@@ -73,8 +72,19 @@ import { req } from '@/plugins/requester';
 import { useAlertStore } from '@/store/alert';
 import { useAppStore } from '@/store/app';
 import ThumbComp from './ThumbComp.vue';
+import setting from '@/utils/setting';
 
 const props = defineProps({
+    /**
+     * 
+     * Chave na resposta em que se encontra a lista de itens
+     * 
+     */
+    dataField: {
+        type: String,
+        default: null
+    },
+
     /**
      * 
      * Thumb config
@@ -114,44 +124,16 @@ const props = defineProps({
      * 
      * Obter lista
      * actionGetList deve ser uma função que obtem a lista de items do backend. A função deve:
+     * - capturar dados de:
+     *   - paginação ou
+     *   - filtragem
+     * e atribuir a url
      * - retornar uma Promise, para então executar, internamente, o processos: .then().catch().then()
      * 
      */
     actionGetList: {
         type: Function,
         default: null,
-    },
-
-    /**
-     * 
-     * Trocar página
-     * actionChangePage deve ser uma função que obtem a lista de items do backend de acordo com a página informada. A função deve:
-     * - retornar uma Promise, para então executar, internamente, o processos: .then().catch().then()
-     * 
-     */
-    actionChangePage: {
-        type: Function,
-        default: null
-    },
-
-    /**
-     * 
-     * Filtragem da lista
-     * 
-     * actionFilter precisa ser uma função que recebe os dados de filtragem em formato de objeto, exemplo:
-     *     {
-     *         search: 'termo de busca',
-     *         orderbyname: 'asc',
-     *         urlParams: search=termo de busca&orderbyname=asc
-     *     }
-     * 
-     * Com os dados de filtragem em mãos, a função deve fazer uma requisição ao backend solicitando a filtragem e então:
-     * - retornar uma Promise, para então executar, internamente, o processos: .then().catch().then()
-     * 
-     */
-    actionFilter: {
-        type: Function,
-        default: null
     },
 
     /**
@@ -213,6 +195,7 @@ const appStore = useAppStore();
 const list = ref([]);
 
 const pagination = ref({
+    limit: setting.getSetting('items_per_page'),
     page: 1,
     pages: props.pages
 });
@@ -220,7 +203,6 @@ const pagination = ref({
 const filtering = ref({
     isFilter: false,
     filtering: false,
-    list: [],
     data: {
         search: null
     }
@@ -245,19 +227,12 @@ const deleteConfirmation = ref({
  * 
  */
 const method_actionFilter = () => {
-    if (!props.actionFilter) {
-        return;
-    }
+    const urlParams = method_getUrlParams(filtering.value.data);
 
-    let filterFields = (Object.entries(filtering.value.data).map((d) => {
-        if (!d[1]) {
-            return null;
-        }
+    // reset page offset
+    pagination.value.page = 1;
 
-        return d[0] + '=' + d[1];
-    })).filter((ff) => { return ff !== null });
-
-    if (!filterFields.length && filtering.value.isFilter) {
+    if (!urlParams.hasFilterFields && filtering.value.isFilter) {
         // reload list
         method_actionGetList().finally(() => {
             filtering.value.filtering = false;
@@ -266,17 +241,46 @@ const method_actionFilter = () => {
         return;
     }
 
-    filtering.value.filtering = true;
-
-    let promise = props.actionFilter({
-        data: filtering.value.data,
-        urlParams: filterFields.join('&')
-    });
-
-    method_callGetList(promise).finally(() => {
-        filtering.value.filtering = false;
+    method_actionGetList().finally(() => {
+        filtering.value.filtering = false
         filtering.value.isFilter = true;
     });
+};
+
+const method_getUrlParams = (filter = false) => {
+    let defaults = method_getObjectAsArray({
+        limit: pagination.value.limit,
+        page: pagination.value.page
+    });
+    let filterFields = [];
+
+    if (filter) {
+        filterFields = method_getObjectAsArray(filtering.value.data);
+    }
+
+    return {
+        hasFilterFields: filterFields.length > 0,
+        data: [
+            ...defaults,
+            ...filterFields
+        ]
+    };
+};
+
+const method_getObjectAsArray = (obj) => {
+    let filterFields = (Object.entries(obj).map((d) => {
+        if (!d[1]) {
+            return null;
+        }
+
+        return d[0] + '=' + d[1];
+    })).filter((ff) => { return ff !== null });
+
+    if (!filterFields.length) {
+        filterFields = [];
+    }
+
+    return filterFields;
 };
 
 /**
@@ -292,15 +296,10 @@ const method_actionGetList = () => {
         return;
     }
 
-    return method_callGetList(props.actionGetList());
-};
-
-const method_actionChangePage = () => {
-    if (!props.actionChangePage) {
-        return;
-    }
-
-    method_callGetList(props.actionChangePage(pagination.value.page));
+    return method_callGetList(props.actionGetList({
+        data: method_getUrlParams(true).data,
+        urlParams: method_getUrlParams(true).data.join('&')
+    }));
 };
 
 const method_callGetList = (promise) => {
@@ -308,8 +307,8 @@ const method_callGetList = (promise) => {
 
     return promise
         .then((resp) => {
-            list.value = resp.data.users.list;
-            pagination.value.pages = (resp.data.users?.meta?.links?.length ?? 2) - 2;
+            list.value = resp.data[props.dataField].list;
+            pagination.value.pages = (resp.data[props.dataField]?.meta?.links?.length ?? 2) - 2;
         })
         .catch((resp) => {
             useAlertStore().addError(resp.response?.data?.error, false);
@@ -453,10 +452,6 @@ const computed_showDeleteAction = computed(() => {
     return props.actionDelete ? true : false;
 });
 
-// const computed_thumSlotHasContent = computed(()=>{
-//     return !!$slo
-// });
-
 /**
  * 
  * 
@@ -465,7 +460,7 @@ const computed_showDeleteAction = computed(() => {
  * 
  */
 watch(() => pagination.value.page, () => {
-    method_actionChangePage();
+    method_actionGetList();
 });
 
 method_actionGetList();
