@@ -1,70 +1,32 @@
 # LAPPF
 Frontend para API em Laravel 10 [LAPP](https://github.com/ernandesrs/pproj_lapp).
 
+# REQUISITOS
+- [LAPP](https://github.com/ernandesrs/pproj_lapp) instalado e configurado.
+
 ## Project setup
-
 ```
-# yarn
-yarn
-
 # npm
 npm install
-
-# pnpm
-pnpm install
-
-# bun
-bun install
 ```
 
 ### Compiles and hot-reloads for development
-
 ```
-# yarn
-yarn dev
-
 # npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# bun
-bun run dev
 ```
 
 ### Compiles and minifies for production
-
 ```
-# yarn
-yarn build
-
 # npm
 npm run build
-
-# pnpm
-pnpm build
-
-# bun
-bun run build
 ```
 
 ### Lints and fixes files
-
 ```
-# yarn
-yarn lint
-
 # npm
 npm run lint
-
-# pnpm
-pnpm lint
-
-# bun
-bun run lint
 ```
 
 ### Customize configuration
-
 See [Configuration Reference](https://vitejs.dev/config/).
