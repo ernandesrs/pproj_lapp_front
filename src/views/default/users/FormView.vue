@@ -6,9 +6,22 @@
         <!-- start -->
         <v-sheet>
             <v-row justify="center">
-                <v-col v-if="!computed_isCreating" cols="12" md="4" lg="3" class="d-flex justify-center mb-6">
-                    <div>
-                        <thumb-comp :alternative-text="formUser.basicData.first_name" :image-url="formUser.basicData.photo_url" max-width="175" max-height="175" elevated circle border />
+                <v-col v-if="!computed_isCreating" cols="12" sm="10" md="4" lg="3"
+                    class="d-flex flex-column align-center justify-center mb-6">
+                    <div class="w-full mb-8">
+                        <thumb-comp :alternative-text="formUser.basicData.first_name"
+                            :image-url="formUser.basicData.photo_url" max-width="175" max-height="175" elevated circle
+                            border />
+                    </div>
+
+                    <div class="w-100">
+                        <v-select @update:model-value="method_roleChanges" v-model="userRoles.change" label="Funções"
+                            :items="computed_rolesAsSelectItems" multiple :loading="roles.loading || userRoles.updating"
+                            :readonly="roles.loading || userRoles.updating" />
+
+                        <v-alert v-if="userRoles.original?.length" type="info" border="start" density="comfortable"
+                            variant="text" :icon="false"
+                            text="Este usuário possui acesso ao administrativo e suas permissões são definidas nas funções atribuídas a ele." />
                     </div>
                 </v-col>
                 <v-col cols="12" sm="10" md="8" lg="6">
@@ -56,13 +69,21 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAlertStore } from '@/store/alert';
 import ThumbComp from '@/components/ThumbComp.vue';
 
+const loading = ref(true);
 const route = useRoute();
-
 const router = useRouter();
-
 const alertStore = useAlertStore();
 
-const loading = ref(true);
+let roles = reactive({
+    loading: true,
+    list: []
+});
+
+let userRoles = reactive({
+    updating: false,
+    original: [],
+    change: []
+});
 
 const formUser = reactive({
     creating: false,
@@ -82,6 +103,8 @@ const formUser = reactive({
  * 
  */
 const method_getUser = () => {
+    loading.value = true;
+
     const userId = route.params?.user_id;
 
     if (!userId) {
@@ -101,9 +124,32 @@ const method_getUser = () => {
 
             // basic
             formUser.basicData = resp.data.user;
+
+            // roles
+            const theUserRoles = Object.values(resp.data.user.roles).map((role) => {
+                return role.id;
+            });
+
+            userRoles.original = theUserRoles;
+            userRoles.change = theUserRoles;
         },
         finally: () => {
             loading.value = false;
+        }
+    });
+};
+
+const method_getRoles = () => {
+    roles.loading = true;
+
+    return req({
+        action: '/admin/roles',
+        method: 'get',
+        success: (resp) => {
+            roles.list = resp.data.roles.list;
+        },
+        finally: () => {
+            roles.loading = false;
         }
     });
 };
@@ -153,7 +199,40 @@ const method_formSubmit = () => {
             formUser.submitting = false;
         }
     });
-}
+};
+
+const method_roleChanges = (roles) => {
+    userRoles.updating = true;
+
+    let add = roles.filter(roleId => !userRoles.original.includes(roleId));
+    let remove = userRoles.original.filter(roleId => !roles.includes(roleId));
+    if (add.length == 0 && remove.length == 0) {
+        return;
+    }
+
+    let isAddRole = add.length ? true : false;
+
+    return req({
+        action: isAddRole ? '/admin/users/' + formUser.data.id + '/role/' + add[0] : '/admin/users/' + formUser.data.id + '/role/' + remove[0],
+        method: isAddRole ? 'patch' : 'delete',
+        success: () => {
+            alertStore.addMessage(
+                isAddRole ? 'Nova função atribuída ao usuário.' : 'Função removida do usuário.',
+                isAddRole ? 'Atribuída!' : 'Removido!',
+                isAddRole ? 'success' : 'info'
+            );
+
+            if (isAddRole) {
+                userRoles.original.push(add[0]);
+            } else {
+                userRoles.original.splice(userRoles.original.findIndex(v => v == remove[0]), 1);
+            }
+        },
+        finally: () => {
+            userRoles.updating = false;
+        }
+    });
+};
 
 /**
  * 
@@ -166,6 +245,15 @@ const computed_isCreating = computed(() => {
     return formUser.creating;
 });
 
+const computed_rolesAsSelectItems = computed(() => {
+    return Object.entries(roles.list).map((role) => {
+        return {
+            title: role[1].name,
+            value: role[1].id
+        };
+    })
+});
+
 /**
  * 
  * 
@@ -174,5 +262,6 @@ const computed_isCreating = computed(() => {
  * 
  */
 method_getUser();
+method_getRoles();
 
 </script>
