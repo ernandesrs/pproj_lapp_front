@@ -1,7 +1,7 @@
 import cookie from "@/plugins/cookie";
 
 const SETTINGS_DEFAULT = {
-    theme: 'dark',
+    theme: 'light',
     items_per_page: 10
 };
 
