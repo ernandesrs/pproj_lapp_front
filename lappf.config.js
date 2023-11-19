@@ -108,6 +108,29 @@ const config = {
             title: 'Token inválido',
             text: 'O token de atualização de senha é inválido.'
         }
+    },
+
+    /**
+     * 
+     * *
+     * 
+     */
+    terms: {
+        roles: {
+            actions: {
+                view: 'Ver',
+                create: 'Criar',
+                delete: 'Excluir',
+                update: 'Atualizar',
+                viewAny: 'Ver todos',
+                edit_admins: 'Editar administradores',
+                delete_admins: 'Excluir administradores'
+            },
+            manageables: {
+                App_Models_Role: 'Função',
+                App_Models_User: 'Usuário'
+            }
+        }
     }
 };
 

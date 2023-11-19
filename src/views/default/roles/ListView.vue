@@ -4,7 +4,9 @@
 
         <table-comp data-field="roles"
             :columns="[{ key: 'name', label: 'Função' }, { key: 'is_super', label: 'Super admin' }, { key: 'protected', label: 'Protegido/Do sistema' }]"
-            :action-get-list="method_getRoles" :action-delete="(item) => { return '/admin/roles/' + item.id; }" />
+            :action-get-list="method_getRoles"
+            :action-edit="(item) => { return { name: 'dashboard.roles.edit', params: { role_id: item.id } }; }"
+            :action-delete="(item) => { return '/admin/roles/' + item.id; }" />
 
     </base-view>
 </template>
