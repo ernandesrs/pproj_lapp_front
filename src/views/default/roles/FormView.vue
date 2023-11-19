@@ -15,7 +15,7 @@
                         </div>
                     </v-col>
                     <v-col v-if="!computed_isCreating" cols="12" md="6" lg="5">
-                        <v-expansion-panels>
+                        <v-expansion-panels :disabled="roleForm.data.protected">
                             <v-expansion-panel v-for="manageable, manageableIndex in roleForm.data.manageables"
                                 :key="manageable" :title="'Permissões sobre ' + getTerms.roles.manageables(manageableIndex)"
                                 :ripple="false">
