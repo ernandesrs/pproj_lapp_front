@@ -1,12 +1,12 @@
 <template>
     <base-view page-title="Funções" :breadcrumbs="[{ title: 'Funções', to: { name: 'dashboard.roles' } }]"
-        :action-create="{ show: true, text: 'Nova função', to: { name: 'dashboard.roles.create' } }">
+        :action-create="{ show: authStore.permissions('role').canCreate(), text: 'Nova função', to: { name: 'dashboard.roles.create' } }">
 
         <table-comp data-field="roles"
             :columns="[{ key: 'name', label: 'Função' }, { key: 'is_super', label: 'Super admin' }, { key: 'protected', label: 'Protegido/Do sistema' }]"
             :action-get-list="method_getRoles"
-            :action-edit="(item) => { return { name: 'dashboard.roles.edit', params: { role_id: item.id } }; }"
-            :action-delete="(item) => { return '/admin/roles/' + item.id; }" />
+            :action-edit="authStore.permissions('role').canEdit() ? (item) => { return { name: 'dashboard.roles.edit', params: { role_id: item.id } }; } : null"
+            :action-delete="authStore.permissions('role').canDelete() ? (item) => { return '/admin/roles/' + item.id; } : null" />
 
     </base-view>
 </template>
@@ -16,6 +16,9 @@
 import BaseView from '@/layouts/default/BaseView.vue';
 import TableComp from '@/components/TableComp.vue';
 import { request } from '@/plugins/requester';
+import { useAuthStore } from '@/store/auth';
+
+const authStore = useAuthStore();
 
 const method_getRoles = (d) => {
     let action = '/admin/roles';

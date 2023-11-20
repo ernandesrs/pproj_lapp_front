@@ -14,7 +14,7 @@
                             border />
                     </div>
 
-                    <div class="w-100">
+                    <div class="w-100" v-if="roles.list.length">
                         <v-select @update:model-value="method_roleChanges" v-model="userRoles.change" label="Funções"
                             :items="computed_rolesAsSelectItems" multiple :loading="roles.loading || userRoles.updating"
                             :readonly="roles.loading || userRoles.updating" />
@@ -68,11 +68,13 @@ import { computed, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAlertStore } from '@/store/alert';
 import ThumbComp from '@/components/ThumbComp.vue';
+import { useAuthStore } from '@/store/auth';
 
 const loading = ref(true);
 const route = useRoute();
 const router = useRouter();
 const alertStore = useAlertStore();
+const authStore = useAuthStore();
 
 let roles = reactive({
     loading: true,
@@ -140,6 +142,10 @@ const method_getUser = () => {
 };
 
 const method_getRoles = () => {
+    if (!authStore.permissions('role').canList()) {
+        return;
+    }
+
     roles.loading = true;
 
     return req({
