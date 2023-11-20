@@ -21,7 +21,25 @@ const config = {
             to: {
                 name: 'dashboard.users'
             },
-            activeIn: ['dashboard.users', 'dashboard.users.create', 'dashboard.users.show', 'dashboard.users.edit']
+            activeIn: ['dashboard.users', 'dashboard.users.admins', 'dashboard.users.create', 'dashboard.users.show', 'dashboard.users.edit'],
+            items: [
+                {
+                    text: 'Todos',
+                    icon: 'mdi-account-group',
+                    to: {
+                        name: 'dashboard.users'
+                    },
+                    activeIn: ['dashboard.users']
+                },
+                {
+                    text: 'Administradores',
+                    icon: 'mdi-account-group',
+                    to: {
+                        name: 'dashboard.users.admins'
+                    },
+                    activeIn: ['dashboard.users.admins']
+                }
+            ]
         },
         {
             text: 'Funções',
@@ -159,6 +177,7 @@ const config = {
              */
             'user',
             'dashboard.users',
+            'dashboard.users.admins',
             'dashboard.users.show',
             'dashboard.users.create',
             'dashboard.users.edit'

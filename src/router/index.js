@@ -27,6 +27,14 @@ const routes = [
             component: () => import('@/views/default/users/ListView.vue')
           },
           {
+            path: '/administradores',
+            name: 'dashboard.users.admins',
+            beforeEnter: [
+              middleware.authorize.listAccess
+            ],
+            component: () => import('@/views/default/users/AdminsView.vue')
+          },
+          {
             path: 'criar',
             name: 'dashboard.users.create',
             beforeEnter: [
