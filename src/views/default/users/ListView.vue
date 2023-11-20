@@ -12,7 +12,13 @@
             :columns="[{ key: 'first_name', label: 'Nome' }, { key: 'last_name', label: 'Sobrenome' }, { key: 'email', label: 'Email' }]"
             :action-show="(info) => { return { name: 'dashboard.users.show', params: { user_id: info.id } } }"
             :action-edit="(info) => { return { name: 'dashboard.users.edit', params: { user_id: info.id } } }"
-            :action-delete="(info) => { return '/admin/users/' + info.id; }" />
+            :action-delete="(info) => { return '/admin/users/' + info.id; }">
+
+            <template #listActionButtons>
+                <v-btn text="Custom" color="primary" variant="text" prepend-icon="mdi-arrow-down" />
+            </template>
+
+        </table-comp>
 
     </base-view>
 </template>

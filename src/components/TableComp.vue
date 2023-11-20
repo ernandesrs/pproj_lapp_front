@@ -37,13 +37,18 @@
                             </td>
                             <td v-for="col in props.columns" :key="col" class="text-left">{{ item[col.key] }}</td>
                             <td v-if="computed_showActions" class="text-right">
-                                <v-btn v-if="computed_showShowAction" @click.stop="method_actionShow" icon="mdi-eye-outline"
-                                    color="light-darken-4" variant="text" :ripple="false" :data-item-index="index" />
-                                <v-btn v-if="computed_showEditAction" @click.stop="method_actionEdit"
-                                    icon="mdi-pencil-box-outline" color="info" variant="text" :ripple="false"
-                                    :data-item-index="index" />
-                                <v-btn v-if="computed_showDeleteAction" @click.stop="method_actionDelete" icon="mdi-delete"
-                                    color="danger" variant="text" :ripple="false" :data-item-index="index" />
+                                <v-btn-group density="compact">
+                                    <slot name="listActionButtons" />
+                                    <v-btn v-if="computed_showShowAction" @click.stop="method_actionShow"
+                                        icon="mdi-eye-outline" color="light-darken-4" variant="text" :ripple="false"
+                                        :data-item-index="index" />
+                                    <v-btn v-if="computed_showEditAction" @click.stop="method_actionEdit"
+                                        icon="mdi-pencil-box-outline" color="info" variant="text" :ripple="false"
+                                        :data-item-index="index" />
+                                    <v-btn v-if="computed_showDeleteAction" @click.stop="method_actionDelete"
+                                        icon="mdi-delete" color="danger" variant="text" :ripple="false"
+                                        :data-item-index="index" />
+                                </v-btn-group>
                             </td>
                         </tr>
                     </template>
