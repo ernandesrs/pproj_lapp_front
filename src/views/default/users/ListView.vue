@@ -2,6 +2,10 @@
     <base-view page-title="Usuários" :breadcrumbs="[{ title: 'Usuários', to: { name: 'dashboard.users' } }]"
         :action-create="{ show: true, text: 'Novo usuário', to: { name: 'dashboard.users.create' } }">
 
+        <template #actionButtons>
+            <v-btn text="Outro botão" prepend-icon="mdi-arrow-up" color="primary" />
+        </template>
+
         <table-comp data-field="users"
             :thumb="{ key: 'photo_url', alternativeKey: 'first_name', label: 'Foto', width: 35, height: 35, circle: true }"
             :action-get-list="method_getUsers"
