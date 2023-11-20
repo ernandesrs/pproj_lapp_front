@@ -1,6 +1,11 @@
 <template>
     <base-view page-title="Administradores"
-        :breadcrumbs="[{ title: 'Administradores', to: { name: 'dashboard.users.admins' } }]">
+        :breadcrumbs="[{ title: 'Administradores', to: { name: 'dashboard.users.admins' } }]"
+        :action-create="{ show: true, text: 'Novo usuário', to: { name: 'dashboard.users.create' } }">
+
+        <template #actionButtons>
+            <v-btn text="Novo administrador" color="primary" prepend-icon="mdi-shield-lock" />
+        </template>
 
         <table-comp data-field="users"
             :thumb="{ key: 'photo_url', alternativeKey: 'first_name', label: 'Foto', width: 35, height: 35, circle: true }"

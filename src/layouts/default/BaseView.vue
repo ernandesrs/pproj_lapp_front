@@ -13,12 +13,12 @@
             </div>
 
             <!-- right side -->
-            <div>
+            <v-btn-group density="compact">
                 <v-btn v-if="props.actionCreate.show" @click="method_actionCreate"
                     :text="props.actionCreate.text ?? 'Novo item'" color="success" prepend-icon="mdi-plus"
                     :to="props.actionCreate?.to" />
                 <slot name="actionButtons" />
-            </div>
+            </v-btn-group>
         </v-container>
     </div>
 
