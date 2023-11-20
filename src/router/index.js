@@ -21,21 +21,33 @@ const routes = [
           {
             path: '',
             name: 'dashboard.users',
+            beforeEnter: [
+              middleware.authorize.listAccess
+            ],
             component: () => import('@/views/default/users/ListView.vue')
           },
           {
             path: 'criar',
             name: 'dashboard.users.create',
+            beforeEnter: [
+              middleware.authorize.createAccess
+            ],
             component: () => import('@/views/default/users/FormView.vue')
           },
           {
             path: 'ver/:user_id',
             name: 'dashboard.users.show',
+            beforeEnter: [
+              middleware.authorize.showAccess
+            ],
             component: () => import('@/views/default/users/ShowView.vue')
           },
           {
             path: 'editar/:user_id',
             name: 'dashboard.users.edit',
+            beforeEnter: [
+              middleware.authorize.editAccess
+            ],
             component: () => import('@/views/default/users/FormView.vue')
           }
         ]
@@ -46,21 +58,33 @@ const routes = [
           {
             path: '',
             name: 'dashboard.roles',
+            beforeEnter: [
+              middleware.authorize.listAccess
+            ],
             component: () => import('@/views/default/roles/ListView.vue')
           },
           {
             path: 'criar',
             name: 'dashboard.roles.create',
+            beforeEnter: [
+              middleware.authorize.createAccess
+            ],
             component: () => import('@/views/default/roles/FormView.vue')
           },
           {
             path: 'ver/:role_id',
             name: 'dashboard.roles.show',
+            beforeEnter: [
+              middleware.authorize.showAccess
+            ],
             component: () => import('@/views/default/roles/ShowView.vue')
           },
           {
             path: 'editar/:role_id',
             name: 'dashboard.roles.edit',
+            beforeEnter: [
+              middleware.authorize.editAccess
+            ],
             component: () => import('@/views/default/roles/FormView.vue')
           }
         ]

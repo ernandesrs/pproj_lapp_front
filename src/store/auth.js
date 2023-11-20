@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 import { useAlertStore } from './alert';
 import { req } from '@/plugins/requester';
 import router from '@/router';
+import permissions from '@/core/permissions';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -41,6 +42,10 @@ export const useAuthStore = defineStore('auth', {
         },
         getUsername() {
             return this.user.username;
+        },
+
+        permissions() {
+            return permissions.setUser(this.user);
         }
     }
 })

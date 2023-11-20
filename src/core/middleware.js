@@ -55,6 +55,80 @@ const redirectors = {
     }
 };
 
+const authorizers = {
+    listAccess: (to, from, next) => {
+        let route = null;
+        if (!useAuthStore().permissions(to.name).canList()) {
+            route = {
+                name: 'dashboard.home'
+            };
+            if (!from?.name) {
+                useAlertStore().addDeniedAccessMessage(true);
+            } else {
+                useAlertStore().addDeniedAccessMessage();
+            }
+        }
+        next(route);
+    },
+    createAccess: (to, from, next) => {
+        let route = null;
+        if (!useAuthStore().permissions(to.name).canCreate()) {
+            route = {
+                name: 'dashboard.home'
+            };
+            if (!from?.name) {
+                useAlertStore().addDeniedAccessMessage(true);
+            } else {
+                useAlertStore().addDeniedAccessMessage();
+            }
+        }
+        next(route);
+    },
+    showAccess: (to, from, next) => {
+        let route = null;
+        if (!useAuthStore().permissions(to.name).canShow()) {
+            route = {
+                name: 'dashboard.home'
+            };
+            if (!from?.name) {
+                useAlertStore().addDeniedAccessMessage(true);
+            } else {
+                useAlertStore().addDeniedAccessMessage();
+            }
+        }
+        next(route);
+    },
+    editAccess: (to, from, next) => {
+        let route = null;
+        if (!useAuthStore().permissions(to.name).canEdit()) {
+            route = {
+                name: 'dashboard.home'
+            };
+            if (!from?.name) {
+                useAlertStore().addDeniedAccessMessage(true);
+            } else {
+                useAlertStore().addDeniedAccessMessage();
+            }
+        }
+        next(route);
+    },
+    deleteAccess: (to, from, next) => {
+        let route = null;
+        if (!useAuthStore().permissions(to.name).canDelete()) {
+            route = {
+                name: 'dashboard.home'
+            };
+            if (!from?.name) {
+                useAlertStore().addDeniedAccessMessage(true);
+            } else {
+                useAlertStore().addDeniedAccessMessage();
+            }
+        }
+        next(route);
+    }
+};
+
 export default {
-    redirectIf: redirectors
+    redirectIf: redirectors,
+    authorize: authorizers
 };

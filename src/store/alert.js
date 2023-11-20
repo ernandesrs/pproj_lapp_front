@@ -33,6 +33,17 @@ export const useAlertStore = defineStore('alert', {
                 );
             }
         },
+        addDeniedAccessMessage(flash = false, duration = null) {
+            const title = 'Acesso negado!';
+            const message = 'Você não tem autorização para acessar a área solicitada.';
+            const type = 'danger';
+
+            if (flash) {
+                this.addFlashMessage(message, title, type, duration);
+            } else {
+                this.addMessage(message, title, type, duration);
+            }
+        },
         addMessage(message, title, type = 'success', duration = null) {
             this.alert.title = title;
             this.alert.message = message;
