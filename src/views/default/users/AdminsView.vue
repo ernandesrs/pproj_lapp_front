@@ -1,9 +1,10 @@
 <template>
-    <base-view page-title="Administradores" :breadcrumbs="[{ title: 'Administradores', to: { name: 'dashboard.users.admins' } }]">
+    <base-view page-title="Administradores"
+        :breadcrumbs="[{ title: 'Administradores', to: { name: 'dashboard.users.admins' } }]">
 
         <table-comp data-field="users"
             :thumb="{ key: 'photo_url', alternativeKey: 'first_name', label: 'Foto', width: 35, height: 35, circle: true }"
-            :action-get-list="method_getAdmins"
+            :show-filters="false" :action-get-list="method_getAdmins"
             :columns="[{ key: 'first_name', label: 'Nome' }, { key: 'last_name', label: 'Sobrenome' }, { key: 'email', label: 'Email' }]"
             :action-show="authStore.permissions('user').canShow() ? (info) => { return { name: 'dashboard.users.show', params: { user_id: info.id } } } : null"
             :action-edit="authStore.permissions('user').canEditAdmins() ? (info) => { return { name: 'dashboard.users.edit', params: { user_id: info.id } } } : null"

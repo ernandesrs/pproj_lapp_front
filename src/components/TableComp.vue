@@ -3,7 +3,7 @@
         :text="deleteConfirmation.dialog.text" :callback-cancel="method_actionDeleteCanceled"
         :callback-confirm="method_actionDeleteConfirmed" />
 
-    <v-sheet class="px-4 py-4 text-right">
+    <v-sheet v-if="props.showFilters" class="px-4 py-4 text-right">
         <v-text-field v-model="filtering.data.search" label="Pesquisar" name="search" density="compact" clearable
             append-icon="mdi-magnify" @click:append="method_actionFilter" :disabled="filtering.filtering" />
     </v-sheet>
@@ -118,6 +118,11 @@ const props = defineProps({
     columns: {
         type: Array,
         default: Array
+    },
+
+    showFilters: {
+        type: Boolean,
+        default: true
     },
 
     /**
