@@ -98,20 +98,43 @@ import TableComp from '@/components/TableComp.vue';
 import { req, request } from '@/plugins/requester';
 import { useAuthStore } from '@/store/auth';
 import { computed, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAlertStore } from '@/store/alert';
 
 const authStore = useAuthStore();
+const router = useRouter();
+const alertStore = useAlertStore();
+
+/**
+ * 
+ * Flag to signal if changes have been made and the list needs to be reloaded
+ * 
+ */
 const reload = ref(false);
+
+/**
+ * 
+ * All roles and selected roles
+ * 
+ */
 const roles = reactive({
     loading: false,
     list: [],
     selected: [],
 });
+
+/**
+ * 
+ * Dialog: (create/edit) admin
+ * 
+ */
 const adminManagerDialog = reactive({
     finding: false,
     saving: false,
     show: false,
     isCreate: true,
     email: null,
+    id: null,
     user: null,
     error: null,
     add: null,
@@ -125,6 +148,10 @@ const adminManagerDialog = reactive({
  * 
  * 
  */
+
+/**
+ * Get admins list
+ */
 const method_getAdmins = () => {
     let action = '/admin/admins';
 
@@ -136,6 +163,9 @@ const method_getAdmins = () => {
     });
 };
 
+/**
+ * Get roles list
+ */
 const method_getRoles = () => {
     roles.loading = true;
     return req({
@@ -150,15 +180,46 @@ const method_getRoles = () => {
     });
 };
 
+const method_dataFromQueryParams = () => {
+    const action = router.currentRoute.value.query?.action;
+    const userId = router.currentRoute.value.query?.user_id;
+
+    if (!userId) {
+        return;
+    }
+
+    adminManagerDialog.id = userId;
+
+    method_findUser().finally(() => {
+        if (!adminManagerDialog.user) {
+            alertStore.addMessage('O usuário não foi encontrado.', '404', 'danger');
+            router.push({ name: 'dashboard.users.admins' });
+            return;
+        }
+
+        if (action == 'create') {
+            method_newAdmin();
+        } else {
+            method_editAdmin(adminManagerDialog.user);
+        }
+    });
+};
+
+/**
+ * Find user by email or id
+ */
 const method_findUser = () => {
     adminManagerDialog.error = null;
     adminManagerDialog.finding = true;
 
+    const action = adminManagerDialog.id ? '/admin/users/' + adminManagerDialog.id : '/admin/users?equals:email=' + adminManagerDialog.email;
+
     return req({
-        action: '/admin/users?equals:email=' + adminManagerDialog.email,
+        action: action,
         method: 'get',
         success: (resp) => {
-            let user = resp.data.users.list[0] ?? null;
+            let user = (resp.data?.users?.list[0] ?? null) ?? resp.data?.user ?? null;
+
             if (!user) {
                 adminManagerDialog.error = 'Usuário não encontrado';
             } else {
@@ -172,11 +233,17 @@ const method_findUser = () => {
     });
 };
 
+/**
+ * Prepare Admin Manager 'create admin' dialog
+ */
 const method_newAdmin = () => {
     adminManagerDialog.isCreate = true;
     method_openAdminManagerDialog();
 };
 
+/**
+ * Prepare Admin Manager 'edit admin' dialog
+ */
 const method_editAdmin = (admin) => {
     adminManagerDialog.isCreate = false;
     adminManagerDialog.user = admin;
@@ -184,20 +251,34 @@ const method_editAdmin = (admin) => {
     method_openAdminManagerDialog();
 };
 
+/**
+ * Open admin manager dialog
+ */
 const method_openAdminManagerDialog = () => {
     adminManagerDialog.show = true;
 };
 
+/**
+ * Close, reset admin manager dialog and reload list
+ */
 const method_closeAdminManagerDialog = () => {
     adminManagerDialog.email = null;
+    adminManagerDialog.id = null;
     adminManagerDialog.user = null;
     adminManagerDialog.show = false;
     adminManagerDialog.error = null;
+
+    router.push({ name: 'dashboard.users.admins' });
 
     if (reload.value) {
         window.location.reload();
     }
 };
+
+/**
+ * 
+ * Roles: ADD and REMOVE
+ */
 
 const method_addRole = (role) => {
     adminManagerDialog.saving = true;
@@ -270,5 +351,6 @@ const computed_allRoles = computed(() => {
  * 
  */
 method_getRoles();
+method_dataFromQueryParams();
 
 </script>
