@@ -78,7 +78,7 @@
         <table-comp data-field="users"
             :thumb="{ key: 'photo_url', alternativeKey: 'first_name', label: 'Foto', width: 35, height: 35, circle: true }"
             :show-filters="false" :action-get-list="method_getAdmins"
-            :columns="[{ key: 'first_name', label: 'Nome' }, { key: 'last_name', label: 'Sobrenome' }, { key: 'email', label: 'Email' }]"
+            :columns="[{ callback: (user) => { return user.first_name + ' ' + user.last_name }, label: 'Nome' }, { key: 'email', label: 'Email' }, { callback: (user) => { return user.roles.map((role) => { return role.name }).join(', ') }, label: 'Funções' }]"
             show-list-actions>
 
             <template #listActionButtons="{ item }">
