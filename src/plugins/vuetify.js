@@ -42,6 +42,15 @@ export default createVuetify({
     },
     VTextArea: {
       variant: 'outlined'
+    },
+    VCard: {
+      class: 'pa-3'
+    },
+    VCardText: {
+      class: 'pt-5'
+    },
+    VCardItem: {
+      class: 'pt-5'
     }
   },
   theme: {
