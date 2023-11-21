@@ -35,10 +35,12 @@
                                     :circle="props.thumb?.circle ?? false" :max-width="props.thumb?.width ?? 50"
                                     :max-height="props.thumb?.height ?? 50" elevated border />
                             </td>
-                            <td v-for="col in props.columns" :key="col" class="text-left">{{ item[col.key] }}</td>
+                            <td v-for="col in props.columns" :key="col" class="text-left">
+                                {{ col?.callback ? col.callback(item) : item[col.key] }}
+                            </td>
                             <td v-if="computed_showActions" class="text-right">
                                 <v-btn-group density="compact">
-                                    <slot name="listActionButtons" />
+                                    <slot name="listActionButtons" :item="item" />
                                     <v-btn v-if="computed_showShowAction" @click.stop="method_actionShow"
                                         icon="mdi-eye-outline" color="light-darken-4" variant="text" :ripple="false"
                                         :data-item-index="index" />

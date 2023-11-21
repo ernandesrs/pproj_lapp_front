@@ -14,8 +14,8 @@
             :action-edit="(info) => { return { name: 'dashboard.users.edit', params: { user_id: info.id } } }"
             :action-delete="(info) => { return '/admin/users/' + info.id; }">
 
-            <template #listActionButtons>
-                <v-btn text="Custom" color="primary" variant="text" prepend-icon="mdi-arrow-down" />
+            <template #listActionButtons="{ item }">
+                <v-btn :text="'Custom ' + item.first_name" color="primary" variant="text" prepend-icon="mdi-arrow-down" />
             </template>
 
         </table-comp>
