@@ -14,7 +14,8 @@
             <v-card min-width="225px">
                 <v-card-item>
                     <div class="d-flex justify-space-between">
-                        <v-btn :to="{name: 'dashboard.profile'}" prepend-icon="mdi-account" text="Perfil" color="primary" variant="text" size="small" />
+                        <v-btn :to="{ name: 'dashboard.profile' }" prepend-icon="mdi-account" text="Perfil" color="primary"
+                            variant="text" size="small" />
                         <v-btn @click.stop="method_logout" prepend-icon="mdi-logout" text="Sair" color="danger"
                             variant="text" size="small" :loading="logouting" />
                     </div>
@@ -94,3 +95,13 @@ drawer.value = appStore.inMobile ? false : true;
 items.value = config.navigation;
 
 </script>
+
+<style>
+.v-list-item .v-list-item__prepend .v-list-item__spacer {
+    width: 20px !important;
+}
+
+.v-list-group .v-list-group__items .v-list-item {
+    padding-inline-start: calc(0px + var(--indent-padding)) !important;
+}
+</style>
