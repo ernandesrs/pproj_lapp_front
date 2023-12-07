@@ -3,7 +3,7 @@
         :action-create="{ show: authStore.permissions('role').canCreate(), text: 'Nova função', to: { name: 'dashboard.roles.create' } }">
 
         <table-comp data-field="roles"
-            :columns="[{ key: 'name', label: 'Função' }, { key: 'is_super', label: 'Super admin' }, { key: 'protected', label: 'Protegido/Do sistema' }]"
+            :columns="[{ key: 'name', label: 'Função' }]"
             :action-get-list="method_getRoles"
             :action-edit="authStore.permissions('role').canEdit() ? (item) => { return { name: 'dashboard.roles.edit', params: { role_id: item.id } }; } : null"
             :action-delete="authStore.permissions('role').canDelete() ? (item) => { return '/admin/roles/' + item.id; } : null" />
