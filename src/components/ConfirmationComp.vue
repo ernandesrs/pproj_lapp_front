@@ -8,7 +8,7 @@
                 {{ props.text ?? 'Esta ação precisa de uma confirmação. Confirme para continuar.' }}
             </v-card-text>
             <v-card-actions>
-                <v-btn @click="method_cancel" class="px-5" prepend-icon="mdi-close" text="Cancelar" variant="elevated"
+                <v-btn @click="method_cancel" class="px-5" prepend-icon="mdi-close" text="Cancelar" variant="outlined"
                     :color="props.color" :disabled="waitConfirmationCallbackResponse"
                     :loading="waitCancelCallbackResponse" />
                 <v-btn @click="method_confirm" class="ml-auto px-5" prepend-icon="mdi-check" variant="text" text="Confirmar"
