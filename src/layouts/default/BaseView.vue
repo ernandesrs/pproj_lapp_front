@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-light py-4">
+    <div class="pt-6">
         <v-container class="w-100 d-flex justify-space-between">
             <!-- left side(title, breadcrumbs) -->
             <div class="flex flex-column">
@@ -22,7 +22,7 @@
         </v-container>
     </div>
 
-    <v-container class="py-6 my-6">
+    <v-container class="py-6 my-6 bg-light-lighten-1 rounded-lg elevation-1">
         <template v-if="!props.loading">
             <slot />
         </template>

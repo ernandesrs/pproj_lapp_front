@@ -66,7 +66,7 @@
 					<v-card-item>
 						<!-- basic data -->
 						<v-form @submit.prevent="method_updatePassword">
-							<v-row>
+							<v-row class="py-2">
 								<v-col cols="12">
 									<v-text-field type="password" v-model="passwordForm.data.password" name="password"
 										label="Senha" id="password" :error-messages="passwordForm.errors?.password" />

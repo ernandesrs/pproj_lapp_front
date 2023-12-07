@@ -146,7 +146,8 @@ const config = {
             },
             manageables: {
                 App_Models_Role: 'Função',
-                App_Models_User: 'Usuário'
+                App_Models_User: 'Usuário',
+                App_Models_Setting_Setting: 'Configurações',
             }
         }
     },
@@ -188,6 +189,10 @@ const config = {
             'dashboard.roles.show',
             'dashboard.roles.create',
             'dashboard.roles.edit'
+        ],
+        'App_Models_Setting_Setting': [
+            'setting',
+            'dashboard.settings'
         ]
     }
 };
