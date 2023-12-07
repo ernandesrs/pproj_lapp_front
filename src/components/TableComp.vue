@@ -3,63 +3,57 @@
         :text="deleteConfirmation.dialog.text" :callback-cancel="method_actionDeleteCanceled"
         :callback-confirm="method_actionDeleteConfirmed" />
 
-    <v-sheet v-if="props.showFilters" class="px-4 py-4 text-right">
+    <template v-if="props.showFilters">
         <v-text-field v-model="filtering.data.search" label="Pesquisar" name="search" density="compact" clearable
             append-icon="mdi-magnify" @click:append="method_actionFilter" :disabled="filtering.filtering" />
-    </v-sheet>
+    </template>
 
     <v-sheet v-if="list.length == 0" class="text-h7 font-weight-medium text-dark-lighten-4 text-center rounded px-10 py-5">
         {{ filtering.isFilter ? 'Sem resultados' : 'A lista está vazia' }}
     </v-sheet>
 
     <template v-else>
-        <v-sheet>
-            <v-table hover>
-                <thead>
+        <v-table hover class="mb-8">
+            <thead>
+                <tr>
+                    <th v-if="props.thumb">
+                        {{ props.thumb?.label ?? 'Thumbnail' }}
+                    </th>
+                    <th v-for="col in props.columns" :key="col" class="text-left">
+                        {{ col.label }}
+                    </th>
+                    <th v-if="computed_showActions" class="text-right">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template v-for="item, index in list" :key="item">
                     <tr>
-                        <th v-if="props.thumb">
-                            {{ props.thumb?.label ?? 'Thumbnail' }}
-                        </th>
-                        <th v-for="col in props.columns" :key="col" class="text-left">
-                            {{ col.label }}
-                        </th>
-                        <th v-if="computed_showActions" class="text-right">Ações</th>
+                        <td v-if="props.thumb" class="py-3">
+                            <thumb-comp :image-url="item[props.thumb.key]"
+                                :alternative-text="item[props.thumb.alternativeKey]" :circle="props.thumb?.circle ?? false"
+                                :max-width="props.thumb?.width ?? 50" :max-height="props.thumb?.height ?? 50" elevated
+                                border />
+                        </td>
+                        <td v-for="col in props.columns" :key="col" class="text-left">{{
+                            col?.callback ? col.callback(item) : item[col.key] }}</td>
+                        <td v-if="computed_showActions" class="text-right">
+                            <v-btn-group density="comfortable">
+                                <slot name="listActionButtons" :item="item" />
+                                <v-btn v-if="computed_showShowAction" @click.stop="method_actionShow" icon="mdi-eye-outline"
+                                    color="light-darken-4" variant="text" :ripple="false" :data-item-index="index" />
+                                <v-btn v-if="computed_showEditAction" @click.stop="method_actionEdit"
+                                    icon="mdi-pencil-box-outline" color="info" variant="text" :ripple="false"
+                                    :data-item-index="index" />
+                                <v-btn v-if="computed_showDeleteAction" @click.stop="method_actionDelete" icon="mdi-delete"
+                                    color="danger" variant="text" :ripple="false" :data-item-index="index" />
+                            </v-btn-group>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <template v-for="item, index in list" :key="item">
-                        <tr>
-                            <td v-if="props.thumb" class="py-3">
-                                <thumb-comp :image-url="item[props.thumb.key]"
-                                    :alternative-text="item[props.thumb.alternativeKey]"
-                                    :circle="props.thumb?.circle ?? false" :max-width="props.thumb?.width ?? 50"
-                                    :max-height="props.thumb?.height ?? 50" elevated border />
-                            </td>
-                            <td v-for="col in props.columns" :key="col" class="text-left">{{
-                                col?.callback ? col.callback(item) : item[col.key] }}</td>
-                            <td v-if="computed_showActions" class="text-right">
-                                <v-btn-group density="compact">
-                                    <slot name="listActionButtons" :item="item" />
-                                    <v-btn v-if="computed_showShowAction" @click.stop="method_actionShow"
-                                        icon="mdi-eye-outline" color="light-darken-4" variant="text" :ripple="false"
-                                        :data-item-index="index" />
-                                    <v-btn v-if="computed_showEditAction" @click.stop="method_actionEdit"
-                                        icon="mdi-pencil-box-outline" color="info" variant="text" :ripple="false"
-                                        :data-item-index="index" />
-                                    <v-btn v-if="computed_showDeleteAction" @click.stop="method_actionDelete"
-                                        icon="mdi-delete" color="danger" variant="text" :ripple="false"
-                                        :data-item-index="index" />
-                                </v-btn-group>
-                            </td>
-                        </tr>
-                    </template>
-                </tbody>
-            </v-table>
-        </v-sheet>
+                </template>
+            </tbody>
+        </v-table>
 
-        <v-sheet v-if="pagination.pages" class="px-4 py-8">
-            <v-pagination v-model="pagination.page" :length="pagination.pages" :total-visible="5" />
-        </v-sheet>
+        <v-pagination v-model="pagination.page" :length="pagination.pages" :total-visible="5" />
     </template>
 </template>
 

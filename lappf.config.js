@@ -29,7 +29,7 @@ const config = {
                     to: {
                         name: 'dashboard.users'
                     },
-                    activeIn: ['dashboard.users']
+                    activeIn: ['dashboard.users', 'dashboard.users.create', 'dashboard.users.show', 'dashboard.users.edit']
                 },
                 {
                     text: 'Administradores',
