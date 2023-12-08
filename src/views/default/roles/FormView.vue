@@ -6,15 +6,15 @@
         <v-sheet>
             <v-form @submit.prevent="method_submitForm">
                 <v-row justify="center" class="mb-5">
-                    <v-col cols="12" md="6" :lg="computed_isCreating ? '6' : '3'">
+                    <v-col cols="12" :lg="computed_isCreating ? '12' : '4'">
                         <v-text-field v-model="roleForm.data.name" label="Nome da função"
                             :error-messages="roleForm.errors?.name" />
-                        <div class="text-center mt-5">
+                        <div class="text-center">
                             <v-btn type="submit" :text="computed_isCreating ? 'Salvar função' : 'Atualizar função'"
                                 prepend-icon="mdi-check" color="primary" :loading="roleForm.submitting" />
                         </div>
                     </v-col>
-                    <v-col v-if="!computed_isCreating" cols="12" md="6" lg="5">
+                    <v-col v-if="!computed_isCreating" cols="12" lg="8">
                         <v-expansion-panels :disabled="roleForm.data.protected ? true : false">
                             <v-expansion-panel v-for="manageable, manageableIndex in roleForm.data.manageables"
                                 :key="manageable" :title="'Permissões sobre ' + getTerms.roles.manageables(manageableIndex)"
