@@ -1,5 +1,5 @@
 <template>
-    <base-view page-title="Usuários" :breadcrumbs="[{ title: 'Usuários', to: { name: 'dashboard.users' } }]"
+    <base-view is-list page-title="Usuários" :breadcrumbs="[{ title: 'Usuários', to: { name: 'dashboard.users' } }]"
         :action-create="{ show: authStore.permissions('user').canCreate(), text: 'Novo usuário', to: { name: 'dashboard.users.create' } }">
 
         <table-comp data-field="users"

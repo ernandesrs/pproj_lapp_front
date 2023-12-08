@@ -4,8 +4,10 @@
         :callback-confirm="method_actionDeleteConfirmed" />
 
     <template v-if="props.showFilters">
-        <v-text-field v-model="filtering.data.search" label="Pesquisar" name="search" density="compact" clearable
-            append-icon="mdi-magnify" @click:append="method_actionFilter" :disabled="filtering.filtering" />
+        <v-container class="py-0">
+            <v-text-field v-model="filtering.data.search" label="Pesquisar" name="search" density="compact" clearable
+                append-icon="mdi-magnify" @click:append="method_actionFilter" :disabled="filtering.filtering" />
+        </v-container>
     </template>
 
     <v-sheet v-if="list.length == 0" class="text-h7 font-weight-medium text-dark-lighten-4 text-center rounded px-10 py-5">

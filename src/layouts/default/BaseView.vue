@@ -22,7 +22,9 @@
         </v-container>
     </div>
 
-    <v-container class="py-6 my-6 bg-light-lighten-1 rounded-lg elevation-1">
+    <v-container
+        :class="['dashboard.home'].includes(route.name) ? [''] : ['py-6', 'my-6 ', 'bg-light-lighten-1', 'elevation-1', (props.isList ? 'px-0' : '')]"
+        class="rounded-lg">
         <template v-if="!props.loading">
             <slot />
         </template>
@@ -36,6 +38,10 @@ import { reactive, onUpdated, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
+    isList: {
+        type: Boolean,
+        default: false
+    },
     pageTitle: {},
     breadcrumbs: {
         type: Array,

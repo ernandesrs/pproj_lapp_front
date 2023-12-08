@@ -1,5 +1,5 @@
 <template>
-    <base-view page-title="Funções" :breadcrumbs="[{ title: 'Funções', to: { name: 'dashboard.roles' } }]"
+    <base-view is-list page-title="Funções" :breadcrumbs="[{ title: 'Funções', to: { name: 'dashboard.roles' } }]"
         :action-create="{ show: authStore.permissions('role').canCreate(), text: 'Nova função', to: { name: 'dashboard.roles.create' } }">
 
         <table-comp data-field="roles"
