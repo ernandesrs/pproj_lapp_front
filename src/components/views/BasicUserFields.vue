@@ -1,10 +1,10 @@
 <template>
     <v-row>
-        <v-col cols="6">
+        <v-col cols="12" sm="6">
             <v-text-field v-model="data.first_name" name="first_name" label="Nome" id="first_name"
                 :error-messages="props.errors?.first_name" />
         </v-col>
-        <v-col cols="6">
+        <v-col cols="12" sm="6">
             <v-text-field v-model="data.last_name" name="last_name" label="Sobrenome" id="last_name"
                 :error-messages="props.errors?.last_name" />
         </v-col>

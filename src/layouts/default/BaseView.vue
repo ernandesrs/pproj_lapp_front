@@ -23,7 +23,7 @@
     </div>
 
     <v-container
-        :class="['dashboard.home'].includes(route.name) ? [''] : ['py-6', 'my-6 ', 'bg-light-lighten-1', 'elevation-1', (props.isList ? 'px-0' : '')]"
+        :class="props.noContainer ? [''] : ['py-6', 'my-6 ', 'bg-light-lighten-1', 'elevation-1', (props.isList ? 'px-0' : '')]"
         class="rounded-lg">
         <template v-if="!props.loading">
             <slot />
@@ -38,6 +38,13 @@ import { reactive, onUpdated, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const props = defineProps({
+    /**
+     * Remove bg, elevation, margin, padding
+     */
+    noContainer: {
+        type: Boolean,
+        default: false
+    },
     isList: {
         type: Boolean,
         default: false

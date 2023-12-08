@@ -5,7 +5,7 @@
         <v-card-text>
             <slot name="content" />
         </v-card-text>
-        <v-card-actions class="d-flex justify-end">
+        <v-card-actions v-if="props.hasActions" class="d-flex justify-end">
             <slot name="actions" />
         </v-card-actions>
     </v-card>
@@ -14,6 +14,10 @@
 <script setup>
 
 const props = defineProps({
+    hasActions: {
+        type: Boolean,
+        default: false
+    },
     elevation: {
         type: [Number, String],
         default: 0

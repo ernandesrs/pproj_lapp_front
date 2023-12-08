@@ -1,5 +1,5 @@
 <template>
-  <base-view page-title="Resumo geral" :breadcrumbs="[]">
+  <base-view no-container page-title="Resumo geral" :breadcrumbs="[]">
 
     <v-row>
       <v-col cols="12">
@@ -36,7 +36,7 @@
       </v-col>
 
       <v-col cols="12" md="6">
-        <section-comp title="Seção de dashboard" subtitle="Breve descrição da seção de dashboard">
+        <section-comp has-actions title="Seção de dashboard" subtitle="Breve descrição da seção de dashboard">
           <template #content>
             <v-table hover density="compact">
               <thead>

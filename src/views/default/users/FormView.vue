@@ -4,67 +4,75 @@
         :loading="loading">
 
         <!-- start -->
-        <v-sheet>
-            <v-row justify="center">
-                <v-col v-if="!computed_isCreating" cols="12" sm="10" md="4" lg="4"
-                    class="d-flex flex-column align-center justify-center mb-6">
-                    <div class="w-full mb-8">
-                        <thumb-comp :alternative-text="formUser.basicData.first_name"
-                            :image-url="formUser.basicData.photo_url" max-width="175" max-height="175" elevated circle
-                            border />
-                    </div>
+        <v-row justify="center">
+            <v-col v-if="!computed_isCreating" cols="12" lg="4">
 
-                    <v-row class="w-100">
-                        <v-col cols="12" class="mb-0 pb-0">
-                            <h4>
-                                <span>
-                                    Funções atribuídas
-                                </span>
-                                <v-btn variant="text" :icon="formUser.data?.roles?.length ? 'mdi-pencil' : 'mdi-plus'"
-                                    color="primary" :ripple="false"
-                                    :to="{ name: 'dashboard.users.admins', query: { action: formUser.data?.roles?.length ? 'edit' : 'create', user_id: formUser.data.id } }" />
-                            </h4>
-                        </v-col>
-                        <v-col cols="auto" v-if="formUser.data?.roles.length == 0">
-                            <v-chip prepend-icon="mdi-shield-lock" text="Nenhuma função atribuída" density="compact" variant="text"
-                                color="light-darken-2" disabeld />
-                        </v-col>
-                        <v-col cols="auto" v-else v-for="role in formUser.data?.roles" :key="role" class="px-0">
-                            <v-chip prepend-icon="mdi-shield-lock" :text="role.name" density="compact" variant="text"
-                                color="primary" :to="{ name: 'dashboard.roles.edit', params: { role_id: role.id } }" />
+                <section-comp title="Foto do usuário" class="mb-4">
+                    <template #content>
+                        <div class="w-full d-flex flex-column align-center justify-center">
+                            <thumb-comp :alternative-text="formUser.basicData.first_name"
+                                :image-url="formUser.basicData.photo_url" max-width="175" max-height="175" elevated circle
+                                border />
+                        </div>
+                    </template>
+                </section-comp>
+
+                <section-comp title="Funções atribuídas" subtitle="Funções atualmente atribuídas a este usuário.">
+                    <template #content>
+                        <v-row class="w-100">
+                            <v-col cols="auto" v-if="formUser.data?.roles.length == 0">
+                                <v-chip prepend-icon="mdi-shield-lock" text="Nenhuma função atribuída" density="compact"
+                                    variant="text" color="light-darken-2" disabeld />
+                            </v-col>
+                            <v-col cols="auto" v-else v-for="role in formUser.data?.roles" :key="role" class="px-0">
+                                <v-chip prepend-icon="mdi-shield-lock" :text="role.name" density="compact" variant="text"
+                                    color="primary" :to="{ name: 'dashboard.roles.edit', params: { role_id: role.id } }" />
+                            </v-col>
+                            <v-col cols="12" class="text-right">
+                                <v-btn variant="outlined"
+                                    :text="formUser.data?.roles?.length ? 'Editar funções' : 'Atribuir funções'"
+                                    :prepend-icon="formUser.data?.roles?.length ? 'mdi-pencil' : 'mdi-plus'" color="primary"
+                                    :ripple="false"
+                                    :to="{ name: 'dashboard.users.admins', query: { action: formUser.data?.roles?.length ? 'edit' : 'create', user_id: formUser.data.id } }"
+                                    size="small" />
+                            </v-col>
+                        </v-row>
+                    </template>
+                </section-comp>
+            </v-col>
+            <v-col cols="12" :lg="!computed_isCreating ? 8 : 12">
+                <v-form @submit.prevent="method_formSubmit">
+                    <section-comp title="Dados básicos do usuário">
+                        <template #content>
+                            <basic-user-fields v-model="formUser.basicData" :errors="formUser.basicDataErrors" />
+
+                            <v-row v-if="computed_isCreating">
+                                <v-col cols="12">
+                                    <v-text-field type="email" v-model="formUser.data.email" name="email" label="E-mail"
+                                        id="email" :error-messages="formUser.dataErrors?.email" />
+                                </v-col>
+                                <v-col cols="12" sm="6">
+                                    <v-text-field type="password" v-model="formUser.data.password" label="Senha"
+                                        id="password" :error-messages="formUser.dataErrors?.password" />
+                                </v-col>
+                                <v-col cols="12" sm="6">
+                                    <v-text-field type="password" v-model="formUser.data.password_confirmation"
+                                        label="Confirmar senha" id="password_confirmation"
+                                        :error-messages="formUser.dataErrors?.password_confirmation" />
+                                </v-col>
+                            </v-row>
+                        </template>
+                    </section-comp>
+
+                    <v-row>
+                        <v-col cols="12" class="text-right">
+                            <v-btn type="submit" :text="computed_isCreating ? 'Registrar' : 'Atualizar'" color="primary"
+                                prepend-icon="mdi-check" :loading="formUser.submitting" />
                         </v-col>
                     </v-row>
-                </v-col>
-                <v-col cols="12" sm="10" md="8" lg="6">
-                    <v-form @submit.prevent="method_formSubmit">
-                        <basic-user-fields v-model="formUser.basicData" :errors="formUser.basicDataErrors" />
-
-                        <v-row v-if="computed_isCreating">
-                            <v-col cols="12">
-                                <v-text-field type="email" v-model="formUser.data.email" name="email" label="E-mail"
-                                    id="email" :error-messages="formUser.dataErrors?.email" />
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                                <v-text-field type="password" v-model="formUser.data.password" label="Senha" id="password"
-                                    :error-messages="formUser.dataErrors?.password" />
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                                <v-text-field type="password" v-model="formUser.data.password_confirmation"
-                                    label="Confirmar senha" id="password_confirmation"
-                                    :error-messages="formUser.dataErrors?.password_confirmation" />
-                            </v-col>
-                        </v-row>
-
-                        <v-row>
-                            <v-col cols="12" class="text-right">
-                                <v-btn type="submit" :text="computed_isCreating ? 'Registrar' : 'Atualizar'" color="primary"
-                                    prepend-icon="mdi-check" :loading="formUser.submitting" />
-                            </v-col>
-                        </v-row>
-                    </v-form>
-                </v-col>
-            </v-row>
-        </v-sheet>
+                </v-form>
+            </v-col>
+        </v-row>
         <!-- end -->
 
     </base-view>
@@ -79,6 +87,7 @@ import { computed, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAlertStore } from '@/store/alert';
 import ThumbComp from '@/components/ThumbComp.vue';
+import SectionComp from '@/components/SectionComp.vue';
 
 const loading = ref(true);
 const route = useRoute();
