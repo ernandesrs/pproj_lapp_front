@@ -1,14 +1,43 @@
-import lappf from './../../lappf.config';
-
 /**
  * 
  * 
- * Allowed resources/permissibles/manageable
- * Check for more or new resources on API return
+ * Allowed resources/manageables
+ * Check for more or new resources on API document on section \Administrative\Role      
+ * https://documenter.getpostman.com/view/15369452/2s9YR57vX9
  * 
  * 
  */
-const resources = lappf.resources;
+const resources = {
+    /**
+     * 
+     * unique names received from backend
+     * 
+     */
+    'App_Models_User': [
+        /**
+         * surnames accepted to be used in the frontend
+         * and that will be related to the unique name
+         */
+        'user',
+        'dashboard.users',
+        'dashboard.users.admins',
+        'dashboard.users.show',
+        'dashboard.users.create',
+        'dashboard.users.edit'
+    ],
+    'App_Models_Role': [
+        'role',
+        'dashboard.roles',
+        'dashboard.roles.show',
+        'dashboard.roles.create',
+        'dashboard.roles.edit'
+    ],
+    'App_Models_Setting_Setting': [
+        'setting',
+        'system.setting',
+        'dashboard.settings.system'
+    ]
+}
 
 let theUser = null;
 let theResource = null;

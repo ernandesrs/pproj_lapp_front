@@ -1,6 +1,14 @@
 import { req } from "@/plugins/requester";
 import { defineStore } from "pinia";
 
+/**
+ * 
+ * Mais tipos na documentação da API:
+ * https://documenter.getpostman.com/view/15369452/2s9YR57vX9
+ * 
+ * na seção: \Administrative\Notification
+ * 
+ */
 const notificationTypes = {
     'App_Notifications_UserRegisteredNotification': {
         title: 'Registro de usuário',
