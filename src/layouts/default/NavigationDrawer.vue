@@ -74,7 +74,82 @@ const route = useRoute();
 
 const drawer = ref(false);
 
-const items = ref([]);
+const items = [
+    // simple menu item
+    {
+        text: 'Dashboard',
+        icon: 'mdi-chart-pie',
+        to: {
+            name: 'dashboard.home'
+        },
+        activeIn: ['dashboard.home']
+    },
+    {
+        text: 'Usuários',
+        icon: 'mdi-account-group',
+        to: {
+            name: 'dashboard.users'
+        },
+        activeIn: ['dashboard.users', 'dashboard.users.admins', 'dashboard.users.create', 'dashboard.users.show', 'dashboard.users.edit'],
+        items: [
+            {
+                text: 'Todos',
+                icon: 'mdi-account-group',
+                to: {
+                    name: 'dashboard.users'
+                },
+                activeIn: ['dashboard.users', 'dashboard.users.create', 'dashboard.users.show', 'dashboard.users.edit']
+            },
+            {
+                text: 'Administradores',
+                icon: 'mdi-account-group',
+                to: {
+                    name: 'dashboard.users.admins'
+                },
+                activeIn: ['dashboard.users.admins']
+            }
+        ]
+    },
+    {
+        text: 'Funções',
+        icon: 'mdi-shield-lock',
+        to: {
+            name: 'dashboard.roles'
+        },
+        activeIn: ['dashboard.roles', 'dashboard.roles.create', 'dashboard.roles.show', 'dashboard.roles.edit']
+    },
+    {
+        text: 'Configurações',
+        icon: 'mdi-cogs',
+        activeIn: ['dashboard.settings.local', 'dashboard.settings.system'],
+        items: [
+            {
+                text: 'Local',
+                icon: 'mdi-cogs',
+                to: {
+                    name: 'dashboard.settings.local'
+                },
+                activeIn: ['dashboard.settings.local']
+            },
+            {
+                text: 'Sistema',
+                icon: 'mdi-cogs',
+                to: {
+                    name: 'dashboard.settings.system'
+                },
+                activeIn: ['dashboard.settings.system']
+            }
+        ]
+    },
+    {
+        text: 'Perfil',
+        icon: 'mdi-account',
+        to: {
+            name: 'dashboard.profile'
+        },
+        activeIn: ['dashboard.profile']
+    }
+];
 
 const logouting = ref(false);
 
