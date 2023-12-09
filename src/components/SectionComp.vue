@@ -2,16 +2,18 @@
     <v-card :elevation="props.elevation" :border="props.border" :loading="props.loading">
         <v-card-title v-if="props.title">{{ props.title }}</v-card-title>
         <v-card-subtitle v-if="props.subtitle">{{ props.subtitle }}</v-card-subtitle>
-        <v-card-text>
+        <v-card-text v-if="computed_hasContent">
             <slot name="content" />
         </v-card-text>
-        <v-card-actions v-if="props.hasActions" class="d-flex justify-end">
+        <v-card-actions v-if="computed_hasActions" class="d-flex justify-end">
             <slot name="actions" />
         </v-card-actions>
     </v-card>
 </template>
 
 <script setup>
+
+import { useSlots, computed } from 'vue';
 
 const props = defineProps({
     hasActions: {
@@ -39,6 +41,14 @@ const props = defineProps({
         type: Boolean,
         default: false
     }
+});
+
+const computed_hasContent = computed(() => {
+    return useSlots()?.content ? true : false;
+});
+
+const computed_hasActions = computed(() => {
+    return useSlots()?.actions ? true : false;
 });
 
 </script>
