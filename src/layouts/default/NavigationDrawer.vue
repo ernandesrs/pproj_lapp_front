@@ -55,7 +55,6 @@
 import { useAuthStore } from '@/store/auth';
 import { useAppStore } from '@/store/app';
 import { useRoute } from 'vue-router';
-import config from './../../../lappf.config';
 import { ref, watch } from 'vue';
 
 const props = defineProps({
@@ -167,7 +166,6 @@ watch(drawer, (n) => {
 }, { immediate: true });
 
 drawer.value = appStore.inMobile ? false : true;
-items.value = config.navigation;
 
 </script>
 
