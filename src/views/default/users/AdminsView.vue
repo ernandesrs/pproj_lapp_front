@@ -66,7 +66,7 @@
         </v-card>
     </v-dialog>
 
-    <base-view page-title="Administradores"
+    <base-view is-list page-title="Administradores"
         :breadcrumbs="[{ title: 'Administradores', to: { name: 'dashboard.users.admins' } }]">
 
         <template #actionButtons>

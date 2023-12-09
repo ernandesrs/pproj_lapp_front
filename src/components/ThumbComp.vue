@@ -1,7 +1,7 @@
 <template>
     <v-img v-if="props.imageUrl" :src="props.imageUrl" :width="(maxWidth + 'px')" :height="(maxHeight + 'px')" cover
         :class="[props.elevated ? 'elevation-4' : '', props.border ? 'border' : '', props.circle ? 'rounded-circle' : '']" />
-    <div v-else class="d-flex align-center justify-center text-h6 font-weight-medium text-light-darken-4"
+    <div v-else class="d-flex align-center justify-center text-h6 font-weight-medium bg-light-lighten-4 text-light-darken-4"
         :class="[props.elevated ? 'elevation-4' : '', props.border ? 'border' : '', props.circle ? 'rounded-circle' : '']"
         :style="['width: ' + props.maxWidth + 'px', 'height: ' + props.maxHeight + 'px']">
         {{ props.alternativeText[0] }}

@@ -2,7 +2,7 @@
 	<v-layout>
 		<navigation-drawer v-model="navigation.drawer" />
 
-		<v-app-bar border="b" flat density="comfortable">
+		<v-app-bar border="b" flat density="default">
 			<v-app-bar-nav-icon variant="text" @click.stop="navigation.drawer = !navigation.drawer" />
 
 			<template #append>
@@ -28,7 +28,7 @@
 			<v-progress-linear v-if="appStore.isLoadingContent" color="primary" indeterminate height="6" absolute />
 		</v-app-bar>
 
-		<v-main class="bg-light" style="min-height: calc(100vh);">
+		<v-main>
 			<alert-comp />
 			<router-view />
 		</v-main>

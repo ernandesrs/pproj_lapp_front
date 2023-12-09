@@ -14,6 +14,7 @@ import colors from 'vuetify/lib/util/colors'
 
 const myThemeColors = {
   'sidebar': colors.grey.darken4,
+  'base-background': colors.blueGrey.lighten5,
 
   'primary': colors.indigo.darken1,
   'secondary': colors.deepPurple.lighten1,
@@ -68,7 +69,11 @@ export default createVuetify({
       dark: {
         dark: true,
         colors: {
-          ...myThemeColors
+          ...myThemeColors,
+          'dark': colors.blueGrey.lighten1,
+          'light': colors.grey.darken4,
+          'base-background': '#121212',
+          'white': colors.grey.darken4
         }
       }
     },

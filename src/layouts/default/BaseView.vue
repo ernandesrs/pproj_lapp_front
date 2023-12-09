@@ -1,6 +1,6 @@
 <template>
-    <div class="pt-6">
-        <v-container class="w-100 d-flex justify-space-between">
+    <div class="pt-6 bg-base-background" style="min-height: calc(100vh - (64px));">
+        <v-container class="d-flex justify-space-between">
             <!-- left side(title, breadcrumbs) -->
             <div class="flex flex-column">
                 <h1 class="text-h5 mb-3">{{ pageTitle }}</h1>
@@ -20,15 +20,15 @@
                 <slot name="actionButtons" />
             </v-btn-group>
         </v-container>
-    </div>
 
-    <v-container
-        :class="props.noContainer ? [''] : ['py-6', 'my-6 ', 'bg-light-lighten-1', 'elevation-1', (props.isList ? 'px-0' : '')]"
-        class="rounded-lg">
-        <template v-if="!props.loading">
-            <slot />
-        </template>
-    </v-container>
+        <v-container
+            :class="props.noContainer ? [''] : ['py-6', 'my-6 ', 'elevation-1', 'bg-white', (props.isList ? 'px-0' : '')]"
+            class="rounded-lg">
+            <template v-if="!props.loading">
+                <slot />
+            </template>
+        </v-container>
+    </div>
 </template>
 
 <script setup>
