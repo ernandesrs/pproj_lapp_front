@@ -28,7 +28,7 @@
 			<v-progress-linear v-if="appStore.isLoadingContent" color="primary" indeterminate height="6" absolute />
 		</v-app-bar>
 
-		<v-main>
+		<v-main class="bg-base-background">
 			<alert-comp />
 			<router-view />
 		</v-main>

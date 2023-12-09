@@ -1,5 +1,5 @@
 <template>
-    <div class="pt-6 bg-base-background" style="min-height: calc(100vh - (64px));">
+    <div class="pt-6" style="min-height: calc(100vh - (64px));">
         <v-container class="d-flex justify-space-between">
             <!-- left side(title, breadcrumbs) -->
             <div class="flex flex-column">

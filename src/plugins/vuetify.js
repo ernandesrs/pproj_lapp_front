@@ -23,7 +23,8 @@ const myThemeColors = {
   'success': colors.green.lighten1,
   'info': colors.blue.lighten1,
   'warning': colors.yellow.lighten1,
-  'danger': colors.red.lighten1
+  'danger': colors.red.lighten1,
+  'white': colors.shades.white
 };
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
