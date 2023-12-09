@@ -52,10 +52,25 @@ const config = {
         {
             text: 'Configurações',
             icon: 'mdi-cogs',
-            to: {
-                name: 'dashboard.settings'
-            },
-            activeIn: ['dashboard.settings']
+            activeIn: ['dashboard.settings.local', 'dashboard.settings.system'],
+            items: [
+                {
+                    text: 'Local',
+                    icon: 'mdi-cogs',
+                    to: {
+                        name: 'dashboard.settings.local'
+                    },
+                    activeIn: ['dashboard.settings.local']
+                },
+                {
+                    text: 'Sistema',
+                    icon: 'mdi-cogs',
+                    to: {
+                        name: 'dashboard.settings.system'
+                    },
+                    activeIn: ['dashboard.settings.system']
+                }
+            ]
         },
         {
             text: 'Perfil',

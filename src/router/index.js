@@ -99,8 +99,18 @@ const routes = [
       },
       {
         path: 'configuracoes',
-        name: 'dashboard.settings',
-        component: () => import('@/views/default/SettingsView.vue')
+        children: [
+          {
+            path: 'configuracoes-local',
+            name: 'dashboard.settings.local',
+            component: () => import('@/views/default/LocalSettingsView.vue')
+          },
+          {
+            path: 'configuracoes-sistema',
+            name: 'dashboard.settings.system',
+            component: () => import('@/views/default/AppSettingsView.vue')
+          }
+        ]
       },
       {
         path: 'perfil',
