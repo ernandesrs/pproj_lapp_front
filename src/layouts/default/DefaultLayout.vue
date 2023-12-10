@@ -21,7 +21,7 @@
 							<v-list>
 								<v-list-item v-for="notification in notificationStore.all" :key="notification.id"
 									:title="notificationStore.getTitle(notification.type)"
-									:subtitle="notificationStore.getSubtitle(notification.type, notification?.data?.user_registered_first_name)"
+									:subtitle="notificationStore.getSubtitle(notification.type, notification?.data?.user?.first_name + ' ' + notification?.data?.user?.last_name)"
 									:prepend-icon="notificationStore.getIcon(notification.type)"
 									:class="[(notification?.read_at ? 'text-light-darken-2' : ''), 'mb-2']">
 
