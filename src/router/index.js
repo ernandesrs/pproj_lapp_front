@@ -140,6 +140,14 @@ const routes = [
           middleware.redirectIf.authenticated
         ],
         component: () => import('@/views/auth/ForgetView.vue')
+      },
+      {
+        path: 'update-password',
+        name: 'auth.updatePassword',
+        beforeEnter: [
+          middleware.redirectIf.authenticated
+        ],
+        component: () => import('@/views/auth/UpdatePasswordView.vue')
       }
     ]
   },
