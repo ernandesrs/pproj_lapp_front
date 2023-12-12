@@ -132,6 +132,14 @@ const routes = [
           middleware.redirectIf.authenticated
         ],
         component: () => import('@/views/auth/LoginView.vue')
+      },
+      {
+        path: 'forget',
+        name: 'auth.forget',
+        beforeEnter: [
+          middleware.redirectIf.authenticated
+        ],
+        component: () => import('@/views/auth/ForgetView.vue')
       }
     ]
   },

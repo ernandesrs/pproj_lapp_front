@@ -1,17 +1,23 @@
 <template>
     <base-view page-title="Login">
         <template #form>
-            <v-form @submit.prevent="method_submit">
-                <v-text-field v-model="userForm.data.email" name="email" label="E-mail" :disabled="userForm.submitting" />
-                <v-text-field :type="showPassword ? 'text' : 'password'" v-model="userForm.data.password" name="password"
-                    label="Senha" :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-                    @click:append-inner="showPassword = !showPassword" :disabled="userForm.submitting" />
+            <v-row class="py-2">
+                <v-col cols="12">
+                    <v-form @submit.prevent="method_submit">
+                        <v-text-field v-model="userForm.data.email" name="email" label="E-mail"
+                            :disabled="userForm.submitting" />
+                        <v-text-field :type="showPassword ? 'text' : 'password'" v-model="userForm.data.password"
+                            name="password" label="Senha"
+                            :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                            @click:append-inner="showPassword = !showPassword" :disabled="userForm.submitting" />
 
-                <div class="py-5 d-flex justify-space-between items-center">
-                    <v-btn flat>Esquecia a senha</v-btn>
-                    <v-btn type="submit" color="primary" :loading="userForm.submitting">Fazer login</v-btn>
-                </div>
-            </v-form>
+                        <div class="py-5 d-flex justify-space-between items-center">
+                            <v-btn flat :to="{ name: 'auth.forget' }">Esquecia a senha</v-btn>
+                            <v-btn type="submit" color="primary" :loading="userForm.submitting">Fazer login</v-btn>
+                        </div>
+                    </v-form>
+                </v-col>
+            </v-row>
         </template>
     </base-view>
 </template>
@@ -72,4 +78,3 @@ const method_submit = () => {
 }
 
 </script>
-  @/plugins/requester
