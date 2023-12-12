@@ -2,31 +2,27 @@
 Frontend para API em Laravel 10 [LAPP](https://github.com/ernandesrs/pproj_lapp).
 
 # REQUISITOS
-- [LAPP](https://github.com/ernandesrs/pproj_lapp) instalado e configurado.
+- [LAPP](https://github.com/ernandesrs/pproj_lapp) devidamnete instalado e configurado.
 
-## Project setup
-```
-# npm
-npm install
-```
+# INSTALAÇÃO
+1. Obtenha o projeto:
+   > git clone https://github.com/ernandesrs/pproj_lapp_front
 
-### Compiles and hot-reloads for development
-```
-# npm
-npm run dev
-```
+2. Acesse a pasta:
+   > cd pproj_lapp_front
 
-### Compiles and minifies for production
-```
-# npm
-npm run build
-```
+3. Copie, cole e renomeie o arquivo 'example.env.local' para '.env.development' e configure os dados para desenvolvimento local.
+   Copie, cole e renomeie o arquivo 'example.env.local' para '.env.production' e configure os dados para produção.
 
-### Lints and fixes files
-```
-# npm
-npm run lint
-```
+4. Execute o comando para instalação de dependências:
+   > npm install
+
+5. Execute o servidor:
+   Para desenvolvimento, use:
+   > npm run dev
+
+   Para gerar arquivos para produção use:
+   > npm run build
 
 ### Customize configuration
 See [Configuration Reference](https://vitejs.dev/config/).
