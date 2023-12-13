@@ -2,9 +2,10 @@
     <v-card :elevation="props.elevation" :border="props.border" :loading="props.loading">
         <v-card-title v-if="props.title">{{ props.title }}</v-card-title>
         <v-card-subtitle v-if="props.subtitle">{{ props.subtitle }}</v-card-subtitle>
-        <v-card-text v-if="computed_hasContent">
+        <v-card-text v-if="props.unbreakedSubtitle" class="text-disabled py-0">{{ props.unbreakedSubtitle }}</v-card-text>
+        <v-card-item v-if="computed_hasContent">
             <slot name="content" />
-        </v-card-text>
+        </v-card-item>
         <v-card-actions v-if="computed_hasActions" class="d-flex justify-end">
             <slot name="actions" />
         </v-card-actions>
@@ -34,6 +35,10 @@ const props = defineProps({
         default: null
     },
     subtitle: {
+        type: [String],
+        default: null
+    },
+    unbreakedSubtitle: {
         type: [String],
         default: null
     },

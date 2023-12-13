@@ -49,7 +49,7 @@ export default createVuetify({
       class: 'pa-3'
     },
     VCardText: {
-      class: 'pt-5'
+      // class: 'pt-5'
     },
     VCardItem: {
       class: 'pt-5'
