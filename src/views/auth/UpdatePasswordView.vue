@@ -1,28 +1,30 @@
 <template>
     <base-view page-title="Atualizar senha">
         <template #form>
-            <v-row class="py-2">
-                <v-col cols="12">
-                    <v-form @submit.prevent="method_submit">
+            <v-form @submit.prevent="method_submit">
+                <v-row class="py-2">
+                    <v-col cols="12">
                         <v-text-field :type="showPassword ? 'text' : 'password'" v-model="updatePasswordForm.data.password"
                             name="password" label="Senha" :disabled="!updatePasswordForm.hasToken"
                             :error-messages="updatePasswordForm.errors?.password"
                             :append-inner-icon="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye'"
                             @click:append-inner="showPassword = !showPassword" />
+                    </v-col>
 
+                    <v-col cols="12">
                         <v-text-field :type="showPassword ? 'text' : 'password'"
                             v-model="updatePasswordForm.data.password_confirmation" name="password_confirmation"
                             label="Senha" :disabled="!updatePasswordForm.hasToken"
                             :error-messages="updatePasswordForm.errors?.password_confirmation" />
+                    </v-col>
 
-                        <div class="py-5 d-flex justify-center items-center">
-                            <v-btn type="submit" color="primary" :loading="updatePasswordForm.submitting"
-                                :disabled="!updatePasswordForm.hasToken">Atualizar
-                                senha</v-btn>
-                        </div>
-                    </v-form>
-                </v-col>
-            </v-row>
+                    <v-col cols="12" class="py-5 d-flex justify-center items-center">
+                        <v-btn type="submit" color="primary" :loading="updatePasswordForm.submitting"
+                            :disabled="!updatePasswordForm.hasToken">Atualizar
+                            senha</v-btn>
+                    </v-col>
+                </v-row>
+            </v-form>
         </template>
     </base-view>
 </template>
