@@ -1,20 +1,24 @@
 <template>
-    <base-view page-title="Configurações"
+    <base-view no-container page-title="Configurações"
         :breadcrumbs="[{ title: 'Configurações local', to: { name: 'dashboard.settings.local' } }]" :loading="loading">
-        <section-comp title="Tema" subtitle="Tema escuro/claro">
+        <section-comp class="mb-5" elevation="1" title="Tema" subtitle="Tema escuro/claro">
             <template #content>
-                <v-select v-model="settingsData.theme"
-                    :items="[{ title: 'Dark', value: 'dark' }, { title: 'Light', value: 'light' }]" label="Tema" />
+                <div class="py-2">
+                    <v-select v-model="settingsData.theme"
+                        :items="[{ title: 'Dark', value: 'dark' }, { title: 'Light', value: 'light' }]" label="Tema" />
+                </div>
             </template>
         </section-comp>
 
-        <section-comp title="Listagens" subtitle="Quantidade de itens em uma lista">
+        <section-comp class="mb-5" elevation="1" title="Listagens" subtitle="Quantidade de itens em uma lista">
             <template #content>
-                <v-text-field v-model="settingsData.items_per_page" label="Items por página" />
+                <div class="py-2">
+                    <v-text-field v-model="settingsData.items_per_page" label="Items por página" />
+                </div>
             </template>
         </section-comp>
 
-        <section-comp>
+        <section-comp class="bg-transparent">
             <template #content>
                 <v-btn @click="method_updateLocalSettings" text="Salvar configurações" color="primary"
                     prepend-icon="mdi-check" :loading="saving" />
