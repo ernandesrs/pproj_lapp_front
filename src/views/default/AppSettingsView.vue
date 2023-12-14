@@ -59,11 +59,13 @@
         color="danger" title="Excluindo servidor"
         text="Você está excluir um servidor de envio de e-mails, isso não pode ser desfeito." />
 
-    <base-view page-title="Configurações"
+    <base-view no-container page-title="Configurações"
         :breadcrumbs="[{ title: 'Configurações do sistema', to: { name: 'dashboard.settings.system' } }]"
         :loading="loading">
-        <section-comp title="Servidores SMTP"
-            unbreaked-subtitle="Seus servidores SMTP cadastrados para envio de e-mail. Sem ao menos um destes dados cadastrados não será possível enviar e-mails de recuperação de conta, por exemplo.">
+
+        <!-- SMTP servers -->
+        <section-comp class="mb-5" elevation="1" title="Servidores SMTP"
+            unbreaked-subtitle="É necessário ao menos um servidor SMTP cadastrado ou não será possível enviar e-mails de recuperação de conta, por exemplo.">
             <template #content>
 
                 <v-row>
@@ -80,13 +82,14 @@
                                         <td>
                                             <v-row class="py-3 my-0">
                                                 <v-col cols="12" sm="6">
-                                                    <p>
-                                                        <span class="font-weight-medium text-medium-emphasis">Nome: </span>
-                                                        <span class="text-disabled">{{ emailSender.display_name
+                                                    <p class="d-flex flex-column mb-3">
+                                                        <span class="font-weight-medium text-medium-emphasis">Usuário:
+                                                        </span>
+                                                        <span class="text-disabled">{{ emailSender.username
                                                         }}</span>
                                                     </p>
 
-                                                    <p>
+                                                    <p class="d-flex flex-column mb-3">
                                                         <span class="font-weight-medium text-medium-emphasis">Remetente:
                                                         </span>
                                                         <span class="text-disabled">{{ emailSender.from_mail
@@ -95,14 +98,14 @@
                                                 </v-col>
 
                                                 <v-col cols="12" sm="6">
-                                                    <p>
+                                                    <p class="d-flex flex-column mb-3">
                                                         <span class="font-weight-medium text-medium-emphasis">Servidor:
                                                         </span>
                                                         <span class="text-disabled">{{ emailSender.host
                                                         }}</span>
                                                     </p>
 
-                                                    <p>
+                                                    <p class="d-flex flex-column mb-3">
                                                         <span class="font-weight-medium text-medium-emphasis">Porta: </span>
                                                         <span class="text-disabled">{{ emailSender.port
                                                         }}</span>
@@ -112,30 +115,36 @@
                                         </td>
 
                                         <td class="text-right">
+                                            <v-btn @click.prevent="method_defaultEmailSender(emailSender.id)" size="small"
+                                                :text="(emailSender.default ? 'Definido' : 'Definir') + ' como padrão'"
+                                                :disabled="(emailSender.default || formEmailSenders.settingAsDefault) ? true : false"
+                                                color="primary" :variant="emailSender.default ? 'flat' : 'text'"
+                                                :ripple="false" class="mr-1" />
+
                                             <v-btn @click.prevent="method_editEmailSender(emailSender.id)" size="small"
-                                                text="Editar" color="primary" variant="outlined" class="mr-1" />
+                                                icon="mdi-pencil" color="info" variant="text" :ripple="false"
+                                                class="mr-1" />
 
                                             <v-btn @click.prevent="method_deleteEmailSender(emailSender.id)" size="small"
-                                                text="Excluir" color="danger" variant="outlined" class="ml-1" />
+                                                icon="mdi-trash-can-outline" color="danger" variant="text" :ripple="false"
+                                                class="ml-1" />
                                         </td>
                                     </tr>
                                 </template>
                             </tbody>
                         </v-table>
                     </v-col>
-
-                    <v-col cols="12">
-                        <v-btn @click="method_newEmailSender" color="success" prepend-icon="mdi-check"
-                            text="Novo servidor" />
-                    </v-col>
                 </v-row>
 
             </template>
 
             <template #actions>
-                <v-btn class="px-5" color="primary" prepend-icon="mdi-check" text="Salvar" variant="elevated" />
+                <v-btn @click="method_newEmailSender" class="px-5" color="success" variant="elevated"
+                    prepend-icon="mdi-check" text="Novo servidor" />
             </template>
         </section-comp>
+        <!-- /SMTP servers -->
+
     </base-view>
 </template>
 
@@ -155,6 +164,7 @@ const loading = ref(true);
 
 const formEmailSenders = reactive({
     submitting: false,
+    settingAsDefault: false,
     showDialog: false,
     showDeleteConfirm: false,
     deleteId: null,
@@ -194,6 +204,35 @@ const method_editEmailSender = (id) => {
     formEmailSenders.data = emailSender;
 
     method_showEmailSenderDialog();
+};
+
+const method_defaultEmailSender = (id) => {
+    const currentDefault = formEmailSenders.list.find((i) => {
+        return i.default;
+    });
+
+    const setAsDefault = formEmailSenders.list.find((i) => {
+        return i.id == id;
+    });
+
+    formEmailSenders.settingAsDefault = true;
+
+    return req({
+        action: '/admin/settings/email-senders/' + id + '/default',
+        method: 'patch',
+        success: () => {
+            alertStore.addMessage("'" + setAsDefault.display_name + "' definido como servidor SMTP padrão.", null, 'success');
+
+            if (currentDefault) {
+                currentDefault.default = false;
+            }
+
+            setAsDefault.default = true;
+        },
+        finally: () => {
+            formEmailSenders.settingAsDefault = false;
+        }
+    });
 };
 
 const method_deleteEmailSender = (id) => {
@@ -255,9 +294,9 @@ const method_emailSenderFormSubmit = () => {
         method: method,
         data: formEmailSenders.data,
         success: (r) => {
-            method_hiddenEmailSenderDialog();
-            alertStore.addMessage('Novo servidor SMTP cadastrado com sucesso.', null, 'success');
+            alertStore.addMessage((formEmailSenders.data?.id ? 'Servidor SMTP atualizado' : 'Novo servidor SMTP cadastrado') + ' com sucesso.', null, 'success');
             formEmailSenders.list.push(r.data.email_sender);
+            method_hiddenEmailSenderDialog();
         },
         fail: (r) => {
             formEmailSenders.errors = r.response.data?.errors;
